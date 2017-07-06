@@ -79,8 +79,9 @@ module.exports=function (){
 
 
 
-    router.get('/getPlayerStandings', function(req, res) {
-    player.getPlayerStandings(a,function(err,result){
+    router.get('/getPlayerStandings/:id', function(req, res) {
+      var id = req.params.id;
+    player.getPlayerStandings(a,id,function(err,result){
       if (err) {
         res.send({
         "invalid":"Who You Are You Are Not Authoonticate user",
@@ -90,7 +91,7 @@ module.exports=function (){
       }else{
         console.log(result + "=======================================");
         //res.cookie('user','email',{signed:true});
-        res.redirect('/')
+        res.redirect('/inside_game')
       }
     });
   });

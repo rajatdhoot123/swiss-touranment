@@ -70,8 +70,8 @@ app.get('/inside_game', checkSignIn, function(req, res) {
 
 /*app.get('/inside_game/:id', checkSignIn, function(req, res) {
         res.status(200).sendFile(path.join(__dirname + '/views/inside_game.html'));
-});
-*/
+});*/
+
 
 
 function checkSignIn(req, res, next){

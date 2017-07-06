@@ -132,7 +132,7 @@ var deleteMatches = function deleteMatches(cb){
 
 
 
-var getPlayerStandings = function getPlayerStandings() {
+var getPlayerStandings = function getPlayerStandings(a,count) {
     var con = create_connection();
     var sql = `select standing.player_name,standing.points,tournament.tour_id from standing,tournament where tournament.tour_id = 2 and tournament.user_id = ${a} group by player_name order by points desc;`;
     con.query(sql, function (err, result) {
@@ -144,8 +144,8 @@ var getPlayerStandings = function getPlayerStandings() {
             con.query(sql,function(err,result){
                 if (err) throw err
                     var matches = result;
-                console.log(matches);
-                getSwissPairings(standings, matches, 3)
+                console.log(count);
+                getSwissPairings(standings, matches, count)
                 con.end();
             })
         })

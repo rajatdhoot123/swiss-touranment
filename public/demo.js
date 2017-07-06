@@ -1,5 +1,7 @@
-$(document).ready(
+var count = 0;
 
+
+$(document).ready(
     function(){
         $('.login #insidebtn').click(function(){
             var value = $("input[type = 'number']").val();
@@ -13,8 +15,9 @@ $(document).ready(
 
 
         $('.start').click(function(){
-            alert('Start Button Clicked')
-            window.location.href = "/";
+            count++;
+            alert(count +"Round Conducted Successfull")
+            window.location.href = "api/getPlayerStandings/"+count;
 
         });
     }
