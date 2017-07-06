@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Tournament</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+
+  <div class="jumbotron text-center">
+    <h1>Welcome to Tournament</h1>
+    <p>Want to Start Tournament</p>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <h2>ENTER THE NAME OF TOURNAMENT</h2>
+        <!-- <p>  <button type="button" class="btn btn-primary">Click Me</button></p> -->
+        <form action="api/subtournament" method="post">
+          Tournament Name: <input type="text" name="tour_name"><br>
+          <input type="submit" value="Submit">
+        </form>
+        <form action="api/sub_tour_count" method="post">
+          <input type="submit" value="View Tournaments">
+        </form>
+
+        <div data-role="main" class="ui-content">
+          <a href="#myPopup" data-rel="popup" class="ui-btn ui-btn-inline ui-corner-all ui-icon-check ui-btn-icon-left">Show Popup Form</a>
+
+          <div data-role="popup" id="myPopup" class="ui-content" style="min-width:250px;">
+            <form method="post" action="/action_page_post.php">
+              <div>
+                <h3>Login information</h3>
+                <label for="usrnm" class="ui-hidden-accessible">PlayerName:</label>
+                <input type="text" name="playername" id="user" placeholder="Username">
+                <label for="pswd" class="ui-hidden-accessible">Tournament Id:</label>
+                <input type="text" name="tourid" id="tour" placeholder="Password">
+                <input type="submit" data-inline="true" value="Log in">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    </body>
+    </html>
+
+
+
+
