@@ -4,7 +4,7 @@ var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : 'mountblue',
-  database : 'demo1'
+  database : 'demo2'
 });
 
 connection.connect(function(err){
@@ -42,8 +42,8 @@ function loginUser(email,password,cb){
 
 
 function registerUser(users,cb){
-  // console.log("req",req.body);
-  connection.query('INSERT INTO users SET ?',users, function (error, results, fields) {
+  console.log(users);
+  connection.query('INSERT INTO users SET ?',users, function (error, results) {
     if (error) {
       cb(error,0)
     }else{
@@ -54,7 +54,6 @@ function registerUser(users,cb){
 
 
 function subTournament(tour_name,id,cb){
-  console.log(tour_name,id)
   connection.query(`insert into tournament (tour_name,id)  values (?,?)`,[tour_name,id], function (error, results) {
       if (error) {
         cb(error, 0)

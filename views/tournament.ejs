@@ -20,9 +20,8 @@
     <div class="col-sm-12">
       <h2>ENTER THE NAME OF TOURNAMENT</h2>
       <!-- <p>  <button type="button" class="btn btn-primary">Click Me</button></p> -->
-        <form action="subtournament" method="post">
+        <form action="usertournament" method="post">
         Tournament Name: <input type="text" name="tour_name"><br>
-        User Id: <input type="text" name="id"><br>
         <input type="submit" value="Submit">
         </form>
 
@@ -39,14 +38,12 @@
 </div>
 
 
+<% for(var i=0;i<tour.length;i++) { %>
+  <a href="/inside_game">
+     <button><%= tour[i].tour_name %></button>
+  </a>
+<% } %>
 
-<%for(var i=0;i<tour.length;i++){%>
-   <button><a href="/inside_game"><%=tour[i].tour_name%></a>
-     <a href="/inside_game"><%=tour[i].tour_id%></a>
-   </button>
-<%}%>
-
-<h3>Plese Enter the Tournament No Corresponding to the Selected Tournament On Next Screen</h3>
 
 </body>
 </html>

@@ -5,8 +5,7 @@ var bodyParser = require('body-parser');
 var parse = bodyParser.urlencoded({ extended: true });
 var router = express.Router();
 var session = require('express-session');
-
-
+var a = 0;
 module.exports=function (){
 
   router.get('/',function(req,res){
@@ -17,9 +16,9 @@ module.exports=function (){
 
   /*<<<<<<<<<<<<<<<<<<<Register Players>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
   router.post('/registerPlayers', parse ,function(req,res){
-    var players = req.body;
+    var players = req.body.name;
     console.log(players);
-    player.registerPlayers(players,function(err,result){
+    player.registerPlayers(a,players,function(err,result){
       if (err) {
         console.log("error ocurred",err);
         res.send({
@@ -28,19 +27,36 @@ module.exports=function (){
         })
       }else{
         console.log('The solution is: ', result);
-        //res.redirect('/inside_game')
+        res.redirect('/inside_game')
       }
     });
   });
 
-    /*<<<<<<<<<<<<<<<<<<<Register Players>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+    /*<<<<<<<<<<<<<<<<<<<Update Player Players>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+/*
+    router.get('/:id',function(req,res){
+        var id = req.params.id;
+        player.insertPlayers(id,function(err,result){
+        if (err) {
+        console.log("error ocurred",err);
+        res.send({
+          "code":400,
+          "failed":"error ocurred"
+        })
+        }else{
+        console.log('The solution is: ', result);
+        //res.redirect('/inside_game')
+      }
+    });
+
+    })*/
+
 
     /*<<<<<<<<<<<<<<<<<<<LOGIN USER>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
   router.post('/loginUser', function(req, res) {
     var email = req.body.email;
     var password = req.body.password;
-    console.log("=================================")
     user.loginUser(email,password,function(err,result){
       if (err) {
         res.send({
@@ -49,6 +65,7 @@ module.exports=function (){
         "failed":err
         })
       }else{
+        a = result[0].user_id;
         req.session.name=result[0].email;
         console.log(req.session.name + "=======================================");
         //res.cookie('user','email',{signed:true});
@@ -63,7 +80,7 @@ module.exports=function (){
 
 
     router.get('/getPlayerStandings', function(req, res) {
-    player.getPlayerStandings(function(err,result){
+    player.getPlayerStandings(a,function(err,result){
       if (err) {
         res.send({
         "invalid":"Who You Are You Are Not Authoonticate user",
@@ -100,10 +117,7 @@ module.exports=function (){
         })
       }else{
         console.log('The solution is: ', result);
-        res.send({
-          "code":200,
-          "success":"user registered sucessfully"
-        });
+        res.redirect('/login')
       }
     });
   });
@@ -111,7 +125,8 @@ module.exports=function (){
 
   /*<<<<<<<<<<<<<<<<<<<CURRENT STATUS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 router.get('/currentStatus', function (req, res) {
-    player.currentStatus(function(err,result){
+  console.log("Current Status Called");
+    player.currentStatus(a,function(err,result){
       if (err) {
         console.log("error ocurred",err);
         res.send({
@@ -119,7 +134,7 @@ router.get('/currentStatus', function (req, res) {
           "failed":"error ocurred"
         })
       }else{
-        console.log('The solution is: ', result);
+        console.log('The solution is:------------------------------------ ', result);
 
         res.render('currentstatus',{current:result});
         /*res.send({
@@ -132,13 +147,10 @@ router.get('/currentStatus', function (req, res) {
 
  /*<<<<<<<<<<<<<<<<<<<CURRENT STATUS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
- /*<<<<<<<<<<<<<<<<<<<Sub Tournament>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-  router.post('/subtournament',parse,function(req,res){
-    var id = req.body.id;
+ /*<<<<<<<<<<<<<<<<<<<User Tournament>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+  router.post('/usertournament',parse,function(req,res){
     var tour_name = req.body.tour_name;
-
-    console.log(id,tour_name+"==========================");
-    user.subTournament([tour_name],[id],function(error,results){
+    player.userTournament([tour_name],[a],function(error,results){
       if (error) {
         console.log("error ocurred",error);
         res.send({
@@ -159,7 +171,7 @@ router.get('/currentStatus', function (req, res) {
 
 /*<<<<<<<<<<<<<<<<<<<Sub Tournament Count>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
   router.post('/sub_tour_count',function(req,res){
-    player.displayPlayers(function(error,results){
+    player.displayTournament(a,function(error,results){
       if (error) {
         console.log("error ocurred",error);
         res.send({

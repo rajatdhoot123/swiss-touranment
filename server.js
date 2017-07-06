@@ -61,10 +61,17 @@ app.route('/login')
         res.sendFile(path.join(__dirname + '/views/login.html'));
     })
 
-app.route('/inside_game')
-    .get(function(req, res) {
-        res.sendFile(path.join(__dirname + '/views/inside_game.html'));
-    })
+
+app.get('/inside_game', checkSignIn, function(req, res) {
+        res.status(200).sendFile(path.join(__dirname + '/views/inside_game.html'));
+});
+
+
+
+/*app.get('/inside_game/:id', checkSignIn, function(req, res) {
+        res.status(200).sendFile(path.join(__dirname + '/views/inside_game.html'));
+});
+*/
 
 
 function checkSignIn(req, res, next){

@@ -5,10 +5,15 @@
 </head>
 <body>
 
-<h1>My First Heading</h1>
+<h1>Current Standing</h1>
 
 <%for(var i=0;i<current.length;i++){%>
-    <a href="#"><%= current[i] %></a>
+<table>
+    <tr style="padding: 20px"><a href="#">
+    <th style="padding: 20px"><%= current[i].player_name %></th>
+    <th style="padding: 20px"><%= current[i].POINTS %></th>
+    </a></tr>
+<table>
 <%}%>
 
 <p>My first paragraph.</p>
