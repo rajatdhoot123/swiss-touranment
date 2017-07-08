@@ -1,0 +1,38 @@
+<link rel="stylesheet" href="" type="text/css">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="http://localhost:3050/demo.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="http://localhost:8000/style.css">
+</head>
+<body>
+  <div class='container'>
+    <form method='post' action='/api/registerPlayers'>
+      <input class='hidden' type="text" hidden value=<%= tourId %> name='tourId'>
+      <input type="text" placeholder="Enter player Name" name='player_name'>
+      <button type="submit">Add Player</button>
+    </form>
+  </div>
+  <form method='post' action='/'>
+    <input class='hidden' type="text" hidden value='' name='t_id'>
+    <p>Click after adding all players</p> <button class='player' type="submit">Done??</button>
+  </form>
+
+    <form method='post' action='/api/getPlayerStandings'>
+      <input class='hidden' type="text" hidden value=<%= tourId %> name='round'>
+      <input class='hidden' type="text" hidden value=<%= tourId %> name='tourId'>
+      <button type="submit">Get Current Fixture </button>
+    </form>
+
+  <form method='post' action='/api/currentStatus'>
+  <input class='hidden' type="text" hidden value=<%= tourId %> name='tourId'>
+    <p>Click To get Current Standings</p> <button class='player' type="submit">Done??</button>
+  </form>
+</body>
+</html>

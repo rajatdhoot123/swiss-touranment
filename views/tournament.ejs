@@ -20,13 +20,13 @@
     <div class="col-sm-12">
       <h2>ENTER THE NAME OF TOURNAMENT</h2>
       <!-- <p>  <button type="button" class="btn btn-primary">Click Me</button></p> -->
-        <form action="usertournament" method="post">
+        <form action="/api/usertournament" method="post">
         Tournament Name: <input type="text" name="tour_name"><br>
         <input type="submit" value="Submit">
         </form>
 
 
-        <form action="sub_tour_count" method="post">
+        <form action="/api/sub_tour_count" method="post">
         <input type="submit" value="View Tournaments">
         </form>
     </div>
@@ -39,8 +39,8 @@
 
 
 <% for(var i=0;i<tour.length;i++) { %>
-  <a href="/inside_game">
-     <button><%= tour[i].tour_name %></button>
+  <a href="/inside_game/<%= tour[i].tour_id %>">
+     <button class="tourId"><%= tour[i].tour_name %></button>
   </a>
 <% } %>
 

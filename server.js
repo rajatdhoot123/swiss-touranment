@@ -19,7 +19,6 @@ app.set('views',path.join(__dirname,'./views'));
 
 app.use(express.static(path.join(__dirname,'/public')));
 
-
 app.use(function(req,res,next){
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -39,39 +38,40 @@ app.get('/tournament', checkSignIn, function(req, res) {
 });
 
 
-/*app.get('/currentStatus', function(req, res) {
-        res.status(200).sendFile(path.join(__dirname + '/views/currentstatus.html'));
-});*/
-
-
 app.route('/register')
 
-    .get(function(req, res) {
-        res.sendFile(path.join(__dirname + '/views/register.html'));
-    })
+.get(function(req, res) {
+    res.sendFile(path.join(__dirname + '/views/register.html'));
+})
 
-    .post(function(req, res) {
-        console.log('processing');
-        res.send('processing the registration form!');
-    })
+.post(function(req, res) {
+    console.log('processing');
+    res.send('processing the registration form!');
+})
 
 app.route('/login')
 
     .get(function(req, res) {
         res.sendFile(path.join(__dirname + '/views/login.html'));
-    })
+})
 
 
-app.get('/inside_game', checkSignIn, function(req, res) {
+/*app.get('/inside_game', checkSignIn, function(req, res) {
         res.status(200).sendFile(path.join(__dirname + '/views/inside_game.html'));
+});
+*/
+
+
+app.get('/inside_game/:id', checkSignIn, function(req, res) {
+        res.render(path.join(__dirname + '/views/inside_game.ejs'),
+            {'tourId' : req.params.id});
 });
 
 
-
-/*app.get('/inside_game/:id', checkSignIn, function(req, res) {
-        res.status(200).sendFile(path.join(__dirname + '/views/inside_game.html'));
-});*/
-
+app.get('/startMatch', function(req, res) {
+        tour_id = req.params.id;
+        res.status(200).sendFile(path.join(__dirname + '/views/tourdetail.html'));
+});
 
 
 function checkSignIn(req, res, next){
@@ -94,10 +94,9 @@ app.get('/logout', function(req,res){
 
 
 
-
 // router.post('/register',login.register);
 // router.post('/login',login.login)
 // router.post('/tournament',login.subtournament)
 // router.post('/registerPlayers',login.registerPlayers)
 app.use('/api',api);
-app.listen(3050);
+app.listen(3000);

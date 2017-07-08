@@ -13,12 +13,5 @@ $(document).ready(
             $("p").append("<br> Tournament Id  "+ value +" Player Name  "+ value1+ "</br>");
         });
 
-
-        $('.start').click(function(){
-            count++;
-            alert(count +"Round Conducted Successfull")
-            window.location.href = "api/getPlayerStandings/"+count;
-
-        });
     }
 )

@@ -16,9 +16,10 @@ module.exports=function (){
 
   /*<<<<<<<<<<<<<<<<<<<Register Players>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
   router.post('/registerPlayers', parse ,function(req,res){
-    var players = req.body.name;
-    console.log(players);
-    player.registerPlayers(a,players,function(err,result){
+    var players = req.body.player_name;
+    var tourId = req.body.tourId;
+    console.log(players+"====================================="+tourId);
+    player.registerPlayers(players,tourId,a,function(err,result){
       if (err) {
         console.log("error ocurred",err);
         res.send({
@@ -26,8 +27,7 @@ module.exports=function (){
           "failed":"error ocurred"
         })
       }else{
-        console.log('The solution is: ', result);
-        res.redirect('/inside_game')
+        res.redirect('/inside_game/:id')
       }
     });
   });
@@ -66,7 +66,7 @@ module.exports=function (){
         })
       }else{
         a = result[0].user_id;
-        req.session.name=result[0].email;
+        req.session.name=result[0].user_id;
         console.log(req.session.name + "=======================================");
         //res.cookie('user','email',{signed:true});
         res.redirect('/tournament')
@@ -74,33 +74,8 @@ module.exports=function (){
     });
   });
 
-
-/*  <<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-
-
-
-    router.get('/getPlayerStandings/:id', function(req, res) {
-      var id = req.params.id;
-    player.getPlayerStandings(a,id,function(err,result){
-      if (err) {
-        res.send({
-        "invalid":"Who You Are You Are Not Authoonticate user",
-        "code":400,
-        "failed":err
-        })
-      }else{
-        console.log(result + "=======================================");
-        //res.cookie('user','email',{signed:true});
-        res.redirect('/inside_game')
-      }
-    });
-  });
-
-
  /* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
-
-    /*<<<<<<<<<<<<<<<<<<<LOGIN USER>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
     /*<<<<<<<<<<<<<<<<<<<REGISTER USER>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
@@ -125,9 +100,11 @@ module.exports=function (){
   /*<<<<<<<<<<<<<<<<<<<REGISTER USER>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
   /*<<<<<<<<<<<<<<<<<<<CURRENT STATUS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-router.get('/currentStatus', function (req, res) {
+router.post('/currentStatus', function (req, res) {
   console.log("Current Status Called");
-    player.currentStatus(a,function(err,result){
+  var tourId = req.body.tourId;
+  console.log(tourId);
+    player.currentStatus(a,tourId,function(err,result){
       if (err) {
         console.log("error ocurred",err);
         res.send({
@@ -147,6 +124,23 @@ router.get('/currentStatus', function (req, res) {
   });
 
  /*<<<<<<<<<<<<<<<<<<<CURRENT STATUS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+
+
+
+   router.post('/getPlayers',function(req,res){
+    player.getPlayers(a,function(error,results){
+      if (error) {
+        console.log("error ocurred",error);
+        res.send({
+          "code":400,
+          "failed":"error ocurred"
+        })
+      }else{
+        console.log('App Players Selected ', results);
+        res.render('allPlayers',{allPlayer : results});
+      }
+    });
+  });
 
  /*<<<<<<<<<<<<<<<<<<<User Tournament>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
   router.post('/usertournament',parse,function(req,res){
@@ -186,6 +180,80 @@ router.get('/currentStatus', function (req, res) {
       }
     });
   });
+
+
+//<<<<<<<<<<<<<<<<<<<<<<<GET PLAYERS STANDING>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+router.post('/getPlayerStandings',function(req,res){
+  console.log('Current Players');
+  var tourId = req.body.tourId;
+  player.getPlayerStandings(tourId,a,function(error,results){
+    if (error) {
+      console.log("error ocurred",error);
+      res.send({
+        "code":400,
+        "failed":"error ocurred"
+      })
+    }else{
+      console.log('App Players Selected ' + results + 'swiss Pairing ', pairing);
+      res.render(('allPlayers',{allPlayer : results}),
+            ('allPlayers',{pairing : pairing})
+        );
+    }
+  });
+});
+
+//++++++++++++++++++++++++++++++GET SWISS PAIRING+++++++++++++++++++++++++++++++++++++++++++
+
+
+
+router.post('/getSwissPairings',function(req,res){
+  console.log('SWISS PAIRING');
+  var tourId = req.body.tourId;
+  player.getPlayerStandings(tourId,a,function(error,results){
+    if (error) {
+      console.log("error ocurred",error);
+      res.send({
+        "code":400,
+        "failed":"error ocurred"
+      })
+    }else{
+      console.log('HERE IS YOUR SWISS PAIRING', pairing);
+      res.render(('allPlayers',{allPlayer : results}),
+            ('allPlayers',{pairing : pairing})
+        );
+    }
+  });
+});
+
+
+
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<GET ALL PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
+
+
+
+
+
+router.get('/getPlayers',function(req,res){
+  console.log("Get Players")
+  player.getPlayers(a,function(error,results){
+    if (error) {
+      console.log("error ocurred",error);
+      res.send({
+        "code":400,
+        "failed":"error ocurred"
+      })
+    }else{
+      console.log('GET ALL PLAYERS ', results);
+      res.render('allPlayers',{allPlayer : results});
+    }
+  });
+});
+
+
 
 /*<<<<<<<<<<<<<<<<<<<Sub Tournament COunt>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 return router;
