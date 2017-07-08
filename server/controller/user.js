@@ -15,30 +15,34 @@ if(!err) {
 }
 });
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++Logni User+++++++++++++++++++++++++++++++++++++++//
+
 function loginUser(email,password,cb){
   connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results) {
-      if (error) {
-        cb(error, 0)
-      }
-      else{
-        console.log('The solution is: ', results);
-          if(results.length >0){
-            if(results[0].password == password){
-              cb(0,results)
-            }
-            else{
-              error = "Email And Password Does Not Match"
-              cb(error,0)
-            }
-          }
+    if (error) {
+      cb(error, 0)
+    }
+    else{
+      console.log('The solution is: ', results);
+      if(results.length >0){
+        if(results[0].password == password){
+          cb(0,results)
+        }
         else{
-          error = "Email Does Not Exist";
+          error = "Email And Password Does Not Match"
           cb(error,0)
         }
+      }
+      else{
+        error = "Email Does Not Exist";
+        cb(error,0)
+      }
     }
   })
 }
 
+
+//++++++++++++++++++++++++++++++++++++++++++++++Register User++++++++++++++++++++++++++++++++++++++++++++
 
 
 function registerUser(users,cb){
@@ -52,6 +56,8 @@ function registerUser(users,cb){
   });
 }
 
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 function subTournament(tour_name,id,cb){
   connection.query(`insert into tournament (tour_name,id)  values (?,?)`,[tour_name,id], function (error, results) {

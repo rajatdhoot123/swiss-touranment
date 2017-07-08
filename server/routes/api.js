@@ -27,7 +27,7 @@ module.exports=function (){
           "failed":"error ocurred"
         })
       }else{
-        res.redirect('/inside_game/:id')
+        res.redirect('/inside_game/'+tourId);
       }
     });
   });
@@ -189,7 +189,8 @@ router.post('/currentStatus', function (req, res) {
 router.post('/getPlayerStandings',function(req,res){
   console.log('Current Players');
   var tourId = req.body.tourId;
-  player.getPlayerStandings(tourId,a,function(error,results){
+  var fixture = false;
+  player.getPlayerStandings(tourId,a,fixture,function(error,results){
     if (error) {
       console.log("error ocurred",error);
       res.send({
@@ -197,10 +198,7 @@ router.post('/getPlayerStandings',function(req,res){
         "failed":"error ocurred"
       })
     }else{
-      console.log('App Players Selected ' + results + 'swiss Pairing ', pairing);
-      res.render(('allPlayers',{allPlayer : results}),
-            ('allPlayers',{pairing : pairing})
-        );
+      res.render('result',{matchresult:results});
     }
   });
 });
@@ -209,6 +207,27 @@ router.post('/getPlayerStandings',function(req,res){
 
 
 
+router.post('/getFixture',function(req,res){
+  console.log('Current Players');
+  var tourId = req.body.tourId;
+  var fixture = true;
+  player.getPlayerStandings(tourId,a,fixture,function(error,results){
+    if (error) {
+      console.log("error ocurred",error);
+      res.send({
+        "code":400,
+        "failed":"error ocurred"
+      })
+    }else{
+      console.log(results);
+      res.render('fixture',{fixture:results});
+    }
+  });
+});
+
+
+
+/*
 router.post('/getSwissPairings',function(req,res){
   console.log('SWISS PAIRING');
   var tourId = req.body.tourId;
@@ -228,7 +247,7 @@ router.post('/getSwissPairings',function(req,res){
   });
 });
 
-
+*/
 
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<GET ALL PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.

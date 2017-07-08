@@ -24,15 +24,22 @@
     <p>Click after adding all players</p> <button class='player' type="submit">Done??</button>
   </form>
 
-    <form method='post' action='/api/getPlayerStandings'>
+    <form method='post' action='/api/getFixture'>
       <input class='hidden' type="text" hidden value=<%= tourId %> name='round'>
       <input class='hidden' type="text" hidden value=<%= tourId %> name='tourId'>
       <button type="submit">Get Current Fixture </button>
     </form>
 
+    <form method='post' action='/api/getPlayerStandings'>
+      <input class='hidden' type="text" hidden value=<%= tourId %> name='round'>
+      <input class='hidden' type="text" hidden value=<%= tourId %> name='tourId'>
+      <button type="submit">Start Match </button>
+    </form>
+
   <form method='post' action='/api/currentStatus'>
   <input class='hidden' type="text" hidden value=<%= tourId %> name='tourId'>
-    <p>Click To get Current Standings</p> <button class='player' type="submit">Done??</button>
+    <p>Click To get Current Standings</p> <button class='player' type="submit">Current Standing
+    </button>
   </form>
 </body>
 </html>
