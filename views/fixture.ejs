@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="http://localhost:3000/demo.js" ></script>
 </head>
 <body>
 
@@ -29,13 +30,19 @@
         <%}%>
       </tbody>
     </table>
+    <div>
+       <button type="button" class="btn btn-primary active total" name="<%= fixture.length %>">
+       Start Match
+       </button>
+    </div>
   </div>
 
 
 
-  <form method='post' action='/api/getPlayerStandings'>
+  <form method='post' id="sub" action='/api/getPlayerStandings'>
     <input class='hidden' type="text" hidden value=<%= fixture[0].tour_id %> name='tourId'>
-    <button type="submit">Start Match </button>
+    <input class='hidden' type="text" id="round" hidden value = "" name='rounds'>
+    <button type="submit" class="hidden">Start Match </button>
   </form>
 </body>
 </html>

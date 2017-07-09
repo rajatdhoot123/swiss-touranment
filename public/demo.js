@@ -1,5 +1,4 @@
-var count = 0;
-
+var count = 1;
 
 $(document).ready(
     function(){
@@ -13,9 +12,17 @@ $(document).ready(
             $("p").append("<br> Tournament Id  "+ value +" Player Name  "+ value1+ "</br>");
         });
 
-
-
-
+        $( ".total" ).click(function() {
+            // var temp = $(this).attr("name")
+            var temp = Math.log2($(this).attr("name"))
+            if(Number.isInteger(temp) && count <= temp){
+                $( "#round" ).attr( "value", `${count}` );
+                $( "#sub" ).submit();
+                count++;
+            }
+            else{
+                alert("Please Add Player in 2^n to Start Match");
+            }
+        });
     }
-
-)
+    )

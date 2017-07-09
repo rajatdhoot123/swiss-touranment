@@ -188,8 +188,11 @@ router.post('/currentStatus', function (req, res) {
 router.post('/getPlayerStandings',function(req,res){
   console.log('Current Players');
 
-  rounds = Math.log2(req.body.rounds);
+
   var tourId = req.body.tourId;
+  var rounds = req.body.rounds;
+
+  console.log(tourId + "===========tour Id=================" + rounds + "=============rounds=========");
   var fixture = false;
   player.getPlayerStandings(tourId,a,fixture,rounds,function(error,results){
     if (error) {
@@ -221,7 +224,7 @@ router.post('/getFixture',function(req,res){
         "failed":"error ocurred"
       })
     }else{
-      console.log(results);
+      console.log(results.length+"==========================================");
       res.render('fixture',{fixture:results});
     }
   });
