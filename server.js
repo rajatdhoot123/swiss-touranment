@@ -16,7 +16,6 @@ app.use(session({ secret: 'winter is coming' ,resave:'false',saveUninitialized :
 var router = express.Router();
 app.set('view engine', 'ejs');
 app.set('views',path.join(__dirname,'./views'));
-
 app.use(express.static(path.join(__dirname,'/public')));
 
 app.use(function(req,res,next){
@@ -63,8 +62,8 @@ app.route('/login')
 
 
 app.get('/inside_game/:id', checkSignIn, function(req, res) {
-        res.render(path.join(__dirname + '/views/inside_game.ejs'),
-            {'tourId' : req.params.id});
+    res.render(path.join(__dirname + '/views/inside_game.ejs'),
+        {'tourId' : req.params.id});
 });
 
 

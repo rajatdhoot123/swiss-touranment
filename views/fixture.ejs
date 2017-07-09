@@ -12,24 +12,30 @@
 
 
 
-<div class="container">
-  <table class="table">
-    <thead>
-      <tr>
-        <th>First Player</th>
-        <th>Second Player</th>
-      </tr>
-    </thead>
-    <tbody>
-    <%for(var i=0;i<fixture.length;i++){%>
-      <tr>
-        <td><%= fixture[i].player_name %></td>
-        <td><%= fixture[i].player_name %></td>
-      </tr>
-    <%}%>
-    </tbody>
-  </table>
-</div>
+  <div class="container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>First Player</th>
+          <th>Second Player</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%for(var i=0;i<fixture.length;i++){%>
+        <tr>
+          <td><%= fixture[i++].player_name %></td>
+          <td><%= fixture[i].player_name %></td>
+        </tr>
+        <%}%>
+      </tbody>
+    </table>
+  </div>
 
+
+
+  <form method='post' action='/api/getPlayerStandings'>
+    <input class='hidden' type="text" hidden value=<%= fixture[0].tour_id %> name='tourId'>
+    <button type="submit">Start Match </button>
+  </form>
 </body>
 </html>

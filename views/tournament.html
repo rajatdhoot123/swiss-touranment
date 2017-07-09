@@ -10,28 +10,28 @@
 </head>
 <body>
 
-
   <div class="jumbotron text-center">
     <h1>Welcome to Tournament</h1>
     <p>Want to Start Tournament</p>
   </div>
-
   <div class="container">
     <div class="row">
       <div class="col-sm-12">
         <h2>ENTER THE NAME OF TOURNAMENT</h2>
         <form action="/api/usertournament" method="post">
-          Tournament Name: <input type="text" name="tour_name"><br>
-
-          <input type="submit" value="Submit">
+          <div class="form-group">
+            <label for="tour_name">Tournament Name:</label>
+            <input type="text" class="form-control" id="tour_name" placeholder="Tournament" name="tour_name">
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
         </form>
         <form action="/api/sub_tour_count" method="post">
-          <input type="submit" value="View Tournaments">
+          <div class="form-group">
+          </div>
+          <button type="submit" class="btn btn-default">View Tournament</button>
         </form>
       </div>
     </div>
   </div>
-
-
 </body>
 </html>

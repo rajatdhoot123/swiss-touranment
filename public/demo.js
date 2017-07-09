@@ -13,5 +13,9 @@ $(document).ready(
             $("p").append("<br> Tournament Id  "+ value +" Player Name  "+ value1+ "</br>");
         });
 
+
+
+
     }
+
 )

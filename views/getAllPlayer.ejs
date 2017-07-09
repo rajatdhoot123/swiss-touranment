@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="http://localhost:3050/demo.js"></script>
+</head>
+<body>
+
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 ">
+      </div>
+    </div>
+  </div>
+
+
+  <div>
+    <% for(var i=0;i<allPlayer.length;i++) { %>
+    <a href="/inside_game/<%= allPlayer[i].tour_id %>">
+      <button type="button" class="tourId btn btn-default"><%= allPlayer[i].player_name %></button>
+    </a>
+    <% } %>
+  </div>
+
+</body>
+</html>

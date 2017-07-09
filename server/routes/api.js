@@ -18,7 +18,6 @@ module.exports=function (){
   router.post('/registerPlayers', parse ,function(req,res){
     var players = req.body.player_name;
     var tourId = req.body.tourId;
-    console.log(players+"====================================="+tourId);
     player.registerPlayers(players,tourId,a,function(err,result){
       if (err) {
         console.log("error ocurred",err);
@@ -137,7 +136,7 @@ router.post('/currentStatus', function (req, res) {
         })
       }else{
         console.log('App Players Selected ', results);
-        res.render('allPlayers',{allPlayer : results});
+        res.render('tournament',{allPlayer : results});
       }
     });
   });
@@ -188,9 +187,11 @@ router.post('/currentStatus', function (req, res) {
 
 router.post('/getPlayerStandings',function(req,res){
   console.log('Current Players');
+
+  rounds = Math.log2(req.body.rounds);
   var tourId = req.body.tourId;
   var fixture = false;
-  player.getPlayerStandings(tourId,a,fixture,function(error,results){
+  player.getPlayerStandings(tourId,a,fixture,rounds,function(error,results){
     if (error) {
       console.log("error ocurred",error);
       res.send({
@@ -209,9 +210,10 @@ router.post('/getPlayerStandings',function(req,res){
 
 router.post('/getFixture',function(req,res){
   console.log('Current Players');
+  var rounds = Math.log2(req.body.rounds);
   var tourId = req.body.tourId;
   var fixture = true;
-  player.getPlayerStandings(tourId,a,fixture,function(error,results){
+  player.getPlayerStandings(tourId,a,fixture,rounds,function(error,results){
     if (error) {
       console.log("error ocurred",error);
       res.send({
@@ -256,9 +258,11 @@ router.post('/getSwissPairings',function(req,res){
 
 
 
-router.get('/getPlayers',function(req,res){
+router.post('/getAllPlayers',function(req,res){
   console.log("Get Players")
-  player.getPlayers(a,function(error,results){
+  var tourId = req.body.tourId;
+  console.log(tourId + "+================Tour Id"+req.session.name+"========================userId")
+  player.getPlayers(req.session.name,tourId,function(error,results){
     if (error) {
       console.log("error ocurred",error);
       res.send({
@@ -267,7 +271,7 @@ router.get('/getPlayers',function(req,res){
       })
     }else{
       console.log('GET ALL PLAYERS ', results);
-      res.render('allPlayers',{allPlayer : results});
+      res.render('getAllPlayer',{allPlayer : results});
     }
   });
 });

@@ -41,54 +41,22 @@ var registerPlayers = function registerPlayers(players,tourId,a, cb) {
                         console.log("Player Added Successfully");
                         cb(0,results);
                     }
-                    });
-                }
-                else{
-                    console.log("Player Already Exist");
-                    cb(error,0);
-                }
+                });
             }
-        })
+            else{
+                console.log("Player Already Exist");
+                cb(error,0);
+            }
+        }
+    })
 }
 
 /*<<<<<<<<<<<<<<<<<<<<<<<<<FUNCTION FOR COUNT PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
-
-
-
-
-
-
-
-
-
-/*<<<<<<<<<<<<<<<<<<<<<<<<<FUNCTION FOR REGISTER PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-/*var count = 0;
-var registerPlayers = function registerPlayers(players,tourId,a, cb) {
-    var con = create_connection();
-
-
-    sql = "INSERT INTO players (player_name,tour_id,user_id) values (?,?,?)";
-    con.query(sql,[players,tourId,a],function (error, results, fields) {
-        con.end();
-        if (error) {
-            console.log(error);
-            return;
-        }
-        count++;
-        var data = Math.log2(count);
-        if (!(data === parseInt(data, 10))||count===1)
-          console.log("total players should be 2^n where n is tolat no. of players");
-        else
-          console.log("you can conduct a round or add more players");
-      cb(null, results.affectedRows);
-  });
-}*/
-
 /*<<<<<<<<<<<<<<<<<<<<<<<<<FUNCTION FOR COUNT PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-var countPlayers = function countPlayers(cb){
+var countPlayers = function countPlayers(a,cb){
     var con=create_connection();
-    var sql="select player_id, count(*) as total_players from player;"
+    var sql=`select id, count(*) as total_players from player where user_id =${a} `;
     con.query(sql,function(err,result){
         con.end();
         if(err) {
@@ -147,24 +115,6 @@ function userTournament(tour_name,user_id,cb){
 //+++++++++++++++++++++++++++++Insert Players+++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-
-
-//++++++++++++++++++++++++++++++User Tounament+++++++++++++++++++++++++++++++++++++++++++++++++
-
-/*function userTournament(tour_name,id,cb){
-  var con = create_connection();
-    con.query(`insert into tournament (tour_name,user_id)  values (?,?)`,[tour_name,id], function (error, results) {
-      if (error) {
-        cb(error, 0)
-      }
-      else{
-        cb(0,results);
-      }
-  })
-}*/
-
-//+++++++++++++++++++++++++++++Insert Players+++++++++++++++++++++++++++++++++++++++++++++++++
-
 function insertPlayers(id,cb){
   console.log(tour_name,id)
   var con = create_connection();
@@ -177,8 +127,6 @@ function insertPlayers(id,cb){
       }
   })
 }
-
-
 
 
 /*<<<<<<<<<<<<<<<<<<<<<<<<<FUNCTION FOR DELETE PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
@@ -210,10 +158,10 @@ var deleteMatches = function deleteMatches(cb){
 
 
 
-var getPlayerStandings = function getPlayerStandings(tourId, a,fixture,cb) {
+var getPlayerStandings = function getPlayerStandings(tourId, a,fixture,rounds,cb) {
     var con = create_connection();
     var sql = (`SELECT players.player_name,players.tour_id,players.user_id,COUNT(matches.winner_id) AS POINTS FROM players LEFT JOIN matches ON matches.winner_id = players.player_name GROUP BY players.player_name having players.user_id = ${a} and players.tour_id= ${tourId} ORDER BY POINTS DESC`);
-    con.query(sql, function (err, result) {
+    con.query(sql, function (err,result) {
         if (err) throw err;
         var standings = result;
         cb(0,result)
@@ -223,7 +171,8 @@ var getPlayerStandings = function getPlayerStandings(tourId, a,fixture,cb) {
             con.query(sql,function(err,result){
                 if (err) throw err
                 var matches = result;
-                getSwissPairings(standings, matches, 2,tourId, fixture,function(pairing){
+                console.log(result);
+                getSwissPairings(standings, matches, rounds ,tourId, fixture,function(pairing){
                     console.log("hello" + pairing);
                 })
             })
@@ -236,14 +185,17 @@ var getPlayerStandings = function getPlayerStandings(tourId, a,fixture,cb) {
 //=======================================Select All Players+++++++++++++++++++++++++++++++++
 
 
-var getPlayers = function getPlayers(a) {
+var getPlayers = function getPlayers(a,tourId,cb) {
     var con = create_connection();
-    var sql = (`select * from players where user_id = ${a}`);
+    console.log(a +"______________________"+tourId+'_____________________________');
+    var sql = (`select * from players where user_id = ${a} and tour_id = ${tourId}`);
     con.query(sql, function (err, result) {
-        if (err) throw err;
-        var count = result.length;
-        console.log(count);
         con.end();
+        if (err) {
+            cb(err,null)
+        }
+        else
+        cb(null,result)
     })
 }
 
@@ -251,12 +203,15 @@ var getPlayers = function getPlayers(a) {
 
 /*<<<<<<<<<<<<<<<<<<<FUNCTION TO DETERMINE WINNER AND LOSER>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
-var matchUpdates = function(player1,player2,round,tourId){
+var matchUpdates = function(player1,player2,rounds,tourId){
     var con = create_connection();
     var sql = 'INSERT INTO matches (winner_id,loser_id,round_id,tour_id) VALUES (?,?,?,?)';
-    con.query(sql,[player1,player2,round,tourId], function (err, result) {
+    con.query(sql,[player1,player2,rounds,tourId], function (err, result) {
         con.end();
         if (err) throw err;
+        else{
+            console.log(rounds);
+        }
     })
 }
 
@@ -286,7 +241,7 @@ var matchUpdates = function(player1,player2,round,tourId){
 
 /*<<<<<<<<<<<<<<<<<<<FUNCTION TO GET SWISS PAIRING>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
-function getSwissPairings(standings, matches, round,tourId,fixture,cb) {
+function getSwissPairings(standings, matches, rounds,tourId,fixture,cb) {
     var pairing = [];
     while(standings.length > 0){
     var sliced = standings.splice(0, 1);
@@ -304,7 +259,7 @@ function getSwissPairings(standings, matches, round,tourId,fixture,cb) {
                 }
                 console.log(fixture)
                 if(fixture === false){
-                matchUpdates(player1,player2,round,tourId,pairing);
+                matchUpdates(player1,player2,rounds,tourId,pairing);
             }
                 standings.splice(i, 1);
                 break;
@@ -333,30 +288,3 @@ module.exports = {
     userTournament : userTournament,
     getPlayers : getPlayers
 }
-
-
-
-
-/*<<<<<<<<<<<<<<<<<<<<<<<<<FUNCTION FOR PLAYER STANDING>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-/*var getPlayerStandings = function getPlayerStandings(round) {
-    var con = create_connection();
-    var sql = 'SELECT PLAYERS.NAME,COUNT(MATCHES.WINNER) AS POINTS FROM PLAYERS LEFT JOIN MATCHES ON MATCHES.WINNER = PLAYERS.NAME GROUP BY PLAYERS.NAME ORDER BY POINTS DESC;';
-    con.query(sql, function(err, res) {
-        con.query(sql, function (err, result) {
-        if (err) throw err;
-        var standings = result;
-
-        // For matches
-        con.query(sql, function(err, res) {
-            var sql = 'SELECT WINNER,LOOSER FROM MATCHES';
-            con.query(sql,function(err,result){
-                if (err) throw err
-                var matches = result;
-                console.log(matches);
-                getSwissPairings(standings, matches, round)
-                con.end();
-                })
-            })
-        })
-    })
-}*/
