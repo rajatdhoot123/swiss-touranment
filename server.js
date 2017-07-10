@@ -12,11 +12,19 @@ var parse = bodyParser.urlencoded({ extended: true });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
-app.use(session({ secret: 'winter is coming' ,resave:'false',saveUninitialized :'true',cookie : 'maxAge: 1000*60*2'}));
 var router = express.Router();
 app.set('view engine', 'ejs');
 app.set('views',path.join(__dirname,'./views'));
 app.use(express.static(path.join(__dirname,'/public')));
+
+var FileStore = require('session-file-store')(session);
+
+app.use(session({
+    secret: 'winter is coming',
+    //store: new FileStore(),
+    resave:'false',
+    saveUninitialized :'true',
+    cookie : 'maxAge: 1000*60*2'}));
 
 app.use(function(req,res,next){
     res.header("Access-Control-Allow-Origin", "*");
@@ -33,7 +41,7 @@ app.get('/', function(req, res) {
 
 
 app.get('/tournament', checkSignIn, function(req, res) {
-        res.status(200).sendFile(path.join(__dirname + '/views/tournament.html'));
+    res.status(200).sendFile(path.join(__dirname + '/views/tournament.html'));
 });
 
 
@@ -50,8 +58,8 @@ app.route('/register')
 
 app.route('/login')
 
-    .get(function(req, res) {
-        res.sendFile(path.join(__dirname + '/views/login.html'));
+.get(function(req, res) {
+    res.sendFile(path.join(__dirname + '/views/login.html'));
 })
 
 
@@ -68,8 +76,8 @@ app.get('/inside_game/:id', checkSignIn, function(req, res) {
 
 
 app.get('/startMatch', function(req, res) {
-        tour_id = req.params.id;
-        res.status(200).sendFile(path.join(__dirname + '/views/tourdetail.html'));
+    tour_id = req.params.id;
+    res.status(200).sendFile(path.join(__dirname + '/views/tourdetail.html'));
 });
 
 
@@ -84,11 +92,10 @@ function checkSignIn(req, res, next){
 }
 
 app.get('/logout', function(req,res){
- req.logOut();
- req.session.destroy(function (err) {
-        console.log("COOKIE DELETED");
-        res.redirect('/');
-    });
+   req.session.destroy(function (err) {
+    console.log("COOKIE DELETED");
+    res.redirect('/');
+});
 });
 
 

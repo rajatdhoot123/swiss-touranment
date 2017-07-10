@@ -1,4 +1,6 @@
-//var argv=require('yargs').argv;
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
   host     : 'localhost',
@@ -18,6 +20,7 @@ if(!err) {
 //+++++++++++++++++++++++++++++++++++++++++++++++++Logni User+++++++++++++++++++++++++++++++++++++++//
 
 function loginUser(email,password,cb){
+
   connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results) {
     if (error) {
       cb(error, 0)
@@ -25,7 +28,7 @@ function loginUser(email,password,cb){
     else{
       console.log('The solution is: ', results);
       if(results.length >0){
-        if(results[0].password == password){
+        if(bcrypt.compareSync(password, results[0].password)){
           cb(0,results)
         }
         else{
@@ -46,8 +49,14 @@ function loginUser(email,password,cb){
 
 
 function registerUser(users,cb){
-  console.log(users);
-  connection.query('INSERT INTO users SET ?',users, function (error, results) {
+  uname = users.first_name;
+  lname = users.last_name;
+  email = users.email;
+  password = users.password;
+
+  var hash = bcrypt.hashSync(password, saltRounds);
+  var sql = `INSERT INTO users (first_name,last_name,email,password) VALUES ('${uname}','${lname}','${email}','${hash}')`;
+  connection.query(sql, function (error, results) {
     if (error) {
       cb(error,0)
     }else{

@@ -9,11 +9,11 @@ function create_connection() {
       user     : 'root',
       password : 'mountblue',
       database : 'demo2'
-    });
+  });
     con.connect(function(err) {
       if (err) throw err;
       console.log("Connected!");
-    });
+  });
     return con;
 }
 
@@ -62,7 +62,7 @@ var countPlayers = function countPlayers(a,cb){
         if(err) {
             cb(err,0);
         }
-    cb(null, result[0].total_players);
+        cb(null, result[0].total_players);
     })
 }
 
@@ -77,7 +77,7 @@ var displayTournament = function displayTournament(a,cb){
         if(err) {
             cb(err,0);
         }
-    cb(null, result);
+        cb(null, result);
     })
 }
 
@@ -112,7 +112,7 @@ function userTournament(tour_name,user_id,cb){
     }
 })
 }
-//+++++++++++++++++++++++++++++Insert Players+++++++++++++++++++++++++++++++++++++++++++++++++
+/*//+++++++++++++++++++++++++++++Insert Players+++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 function insertPlayers(id,cb){
@@ -121,16 +121,16 @@ function insertPlayers(id,cb){
   con.query(`insert into players (player_name,user_id)  values (?,?)`,[player_name,user_id], function (error, results) {
       if (error) {
         cb(error, 0)
-      }
-      else{
+    }
+    else{
         cb(0,results);
-      }
-  })
+    }
+})
 }
-
+*/
 
 /*<<<<<<<<<<<<<<<<<<<<<<<<<FUNCTION FOR DELETE PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-var deletePlayers = function deletePlayers(cb){
+var deletePlayers = function(cb){
     var con = create_connection();
     con.query('TRUNCATE TABLE PLAYERS;', function (error, results) {
         con.end();
@@ -142,7 +142,7 @@ var deletePlayers = function deletePlayers(cb){
 }
 
 /*<<<<<<<<<<<<<<<<<<<<<<<<<FUNCTION FOR DELETE MATCHES>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-var deleteMatches = function deleteMatches(cb){
+var deleteMatches = function(cb){
     var con = create_connection();
     con.query('TRUNCATE TABLE MATCHES;', function (error, results) {
         con.end();
@@ -158,7 +158,7 @@ var deleteMatches = function deleteMatches(cb){
 /*<<<<<<<<<<<<<<<<<<<FUNCTION TO DETERMINE CURRENT STATUS>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
 
- var currentStatus = function(a,tourId,cb){
+var currentStatus = function(a,tourId,cb){
     console.log(tourId);
     var con = create_connection();
     var sql = (`SELECT players.player_name,players.tour_id,players.user_id,COUNT(matches.winner_id) AS POINTS FROM players LEFT JOIN matches ON matches.winner_id = players.player_name GROUP BY players.player_name having (players.user_id = ${a} and players.tour_id= ${tourId}) order by POINTS DESC;`);
@@ -184,7 +184,7 @@ var getPlayers = function getPlayers(a,tourId,cb) {
             cb(err,null)
         }
         else
-        cb(null,result)
+            cb(null,result)
     })
 }
 
@@ -194,8 +194,12 @@ var getPlayers = function getPlayers(a,tourId,cb) {
 
 var getPlayerStandings = function getPlayerStandings(tourId, a,fixture,rounds,cb) {
     var con = create_connection();
-    var sql = (`SELECT players.player_name,players.tour_id,players.user_id,COUNT(matches.winner_id) AS POINTS FROM players LEFT JOIN matches ON matches.winner_id = players.player_name GROUP BY players.player_name having players.user_id = ${a} and players.tour_id= ${tourId} ORDER BY POINTS DESC`);
-    con.query(sql, function (err,result) {
+    var sql = (`SELECT players.player_name,players.tour_id,players.user_id,
+        COUNT(matches.winner_id) AS POINTS FROM players LEFT JOIN matches ON
+        matches.winner_id = players.player_name
+        GROUP BY players.player_name having players.user_id = ${a} and players.tour_id= ${tourId}
+        ORDER BY POINTS DESC`);
+        con.query(sql, function (err,result) {
         if (err) throw err;
         var standings = result;
         cb(0,result)
@@ -204,7 +208,7 @@ var getPlayerStandings = function getPlayerStandings(tourId, a,fixture,rounds,cb
             var sql = `select winner_id,loser_id,tour_id FROM matches where tour_id = ${tourId}`;
             con.query(sql,function(err,result){
                 if (err) throw err
-                var matches = result;
+                    var matches = result;
                 console.log(result);
                 getSwissPairings(standings, matches, rounds ,tourId, fixture,function(pairing){
                     console.log("hello" + pairing);
@@ -219,8 +223,8 @@ var getPlayerStandings = function getPlayerStandings(tourId, a,fixture,rounds,cb
 function getSwissPairings(standings, matches, rounds,tourId,fixture,cb) {
     var pairing = [];
     while(standings.length > 0){
-    var sliced = standings.splice(0, 1);
-    var firstPlayer = sliced[0].player_name;
+        var sliced = standings.splice(0, 1);
+        var firstPlayer = sliced[0].player_name;
         var player1 = firstPlayer;
         for(var i = 0 ;i < standings.length ; i++){
             player2 = standings[i].player_name;
@@ -234,8 +238,8 @@ function getSwissPairings(standings, matches, rounds,tourId,fixture,cb) {
                 }
                 console.log(fixture)
                 if(fixture === false){
-                matchUpdates(player1,player2,rounds,tourId,pairing);
-            }
+                    matchUpdates(player1,player2,rounds,tourId,pairing);
+                }
                 standings.splice(i, 1);
                 break;
             }

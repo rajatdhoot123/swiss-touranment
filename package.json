@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "body-parser": "^1.16.0",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.5.6",
@@ -17,6 +18,7 @@
     "handlebars": "^4.0.10",
     "mysql": "^2.13.0",
     "passport": "^0.3.2",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "session-file-store": "^1.0.0"
   }
 }

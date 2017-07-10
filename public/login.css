@@ -1,11 +1,4 @@
 
-<link rel="stylesheet" href="http://localhost:3000/login.css" />
-
-
-
-<!DOCTYPE html>
-<html>
-<style>
 form {
     border: 3px solid #f1f1f1;
 }
@@ -68,30 +61,3 @@ span.psw {
        width: 100%;
     }
 }
-</style>
-<body>
-
-
-
-<h2>Login Form</h2>
-<form action="api/loginUser" method="post">
-  <div class="imgcontainer">
-  </div>
-
-  <div class="container">
-    <label><b>Username</b></label>
-    <input type="text" name="email" placeholder="email" required>
-
-    <label><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="password" required>
-
-    <button type="submit">Login</button>
-    <input type="checkbox" checked="checked"> Remember me
-  </div>
-
-  <div class="container" style="background-color:#f1f1f1">
-  </div>
-</form>
-
-</body>
-</html>

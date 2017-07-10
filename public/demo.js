@@ -19,14 +19,10 @@ $(document).ready(
                 $( "#round" ).attr( "value", `${count}` );
                 $( "#sub" ).submit();
                 count++;
-
-                for(var i = 0;i < temp;i++){
-
-                }
             }
             else{
                 alert("Please Add Player in 2^n to Start Match");
             }
-        });
+        })
     }
     )
