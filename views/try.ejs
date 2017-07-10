@@ -16,19 +16,19 @@
   <table class="table">
     <thead>
       <tr>
-        <th>Players</th>
-        <th>Tournament Id</th>
-        <th>User Id</th>
-        <th>Points</th>
+        <th>Winner</th>
+        <th>Loser</th>
+        <th>Matches</th>
+        <th>Tournament</th>
       </tr>
     </thead>
     <tbody>
-    <%for(var i=0;i<matchresult.length;i++){%>
+    <%for(var i=0;i<work.length;i++){%>
       <tr>
-        <td><%= matchresult[i].player_name %></td>
-        <td><%= matchresult[i].tour_id %></td>
-        <td><%= matchresult[i].user_id %></td>
-        <td><%= matchresult[i].POINTS %></td>
+        <td><%= work[i].winner_id %></td>
+        <td><%= work[i].loser_id %></td>
+        <td><%= work[i].matches_id %></td>
+        <td><%= work[i].tour_id %></td>
       </tr>
     <%}%>
     </tbody>
@@ -36,9 +36,9 @@
 </div>
 
 <div>
-<form method='post' id="finalResult" action='/api/getFinalResult'>
+<form method='post' id="finalResult" action='/api/getFixture'>
     <div class="form-group">
-      <input class='hidden' type="text" hidden value=<%= matchresult[1].tour_id %> name='tourId'>
+      <input class='hidden' type="text" hidden value=<%= work[1].tour_id %> name='tourId'>
     </div>
     <button type="submit" class="btn btn-default">Fixture</button>
   </form>

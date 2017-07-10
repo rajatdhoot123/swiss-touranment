@@ -186,12 +186,8 @@ router.post('/currentStatus', function (req, res) {
 
 
 router.post('/getPlayerStandings',function(req,res){
-  console.log('Current Players');
-
-
   var tourId = req.body.tourId;
   var rounds = req.body.rounds;
-
   console.log(tourId + "===========tour Id=================" + rounds + "=============rounds=========");
   var fixture = false;
   player.getPlayerStandings(tourId,a,fixture,rounds,function(error,results){
@@ -202,6 +198,7 @@ router.post('/getPlayerStandings',function(req,res){
         "failed":"error ocurred"
       })
     }else{
+      console.log(results + "-----------------------------------------------------------------")
       res.render('result',{matchresult:results});
     }
   });
@@ -229,7 +226,6 @@ router.post('/getFixture',function(req,res){
     }
   });
 });
-
 
 
 /*
@@ -273,11 +269,37 @@ router.post('/getAllPlayers',function(req,res){
         "failed":"error ocurred"
       })
     }else{
-      console.log('GET ALL PLAYERS ', results);
+      console.log('GET ALL PLAYERS++++++++++++++++++++++++++++++++++++++++++++++ ', results);
       res.render('getAllPlayer',{allPlayer : results});
     }
   });
 });
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+router.post('/getFinalResult',function(req,res){
+  var tourId = req.body.tourId;
+  player.getFinalResult(tourId,function(error,results){
+    if (error) {
+      console.log("error ocurred",error);
+      res.send({
+        "code":400,
+        "failed":"error ocurred"
+      })
+    }else{
+      res.render('try',{work:results});
+    }
+  });
+});
+
+
+
+
+
+
+
 
 
 

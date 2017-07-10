@@ -154,6 +154,40 @@ var deleteMatches = function deleteMatches(cb){
 }
 
 
+
+/*<<<<<<<<<<<<<<<<<<<FUNCTION TO DETERMINE CURRENT STATUS>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+
+
+ var currentStatus = function(a,tourId,cb){
+    console.log(tourId);
+    var con = create_connection();
+    var sql = (`SELECT players.player_name,players.tour_id,players.user_id,COUNT(matches.winner_id) AS POINTS FROM players LEFT JOIN matches ON matches.winner_id = players.player_name GROUP BY players.player_name having (players.user_id = ${a} and players.tour_id= ${tourId}) order by POINTS DESC;`);
+    con.query(sql, function (err, result) {
+        console.log(result);
+        con.end();
+        if (err) throw err;
+        cb(null,result)
+    })
+}
+
+
+//=======================================Select All Players+++++++++++++++++++++++++++++++++
+
+
+var getPlayers = function getPlayers(a,tourId,cb) {
+    var con = create_connection();
+    console.log(a +"______________________"+tourId+'_____________________________');
+    var sql = (`select * from players where user_id = ${a} and tour_id = ${tourId}`);
+    con.query(sql, function (err, result) {
+        con.end();
+        if (err) {
+            cb(err,null)
+        }
+        else
+        cb(null,result)
+    })
+}
+
 /*<<<<<<<<<<<<<<<<<<<<<<<<<Get Players Standing>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
 
@@ -179,65 +213,6 @@ var getPlayerStandings = function getPlayerStandings(tourId, a,fixture,rounds,cb
         })
     })
 }
-
-
-
-//=======================================Select All Players+++++++++++++++++++++++++++++++++
-
-
-var getPlayers = function getPlayers(a,tourId,cb) {
-    var con = create_connection();
-    console.log(a +"______________________"+tourId+'_____________________________');
-    var sql = (`select * from players where user_id = ${a} and tour_id = ${tourId}`);
-    con.query(sql, function (err, result) {
-        con.end();
-        if (err) {
-            cb(err,null)
-        }
-        else
-        cb(null,result)
-    })
-}
-
-
-
-/*<<<<<<<<<<<<<<<<<<<FUNCTION TO DETERMINE WINNER AND LOSER>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-
-var matchUpdates = function(player1,player2,rounds,tourId){
-    var con = create_connection();
-    var sql = 'INSERT INTO matches (winner_id,loser_id,round_id,tour_id) VALUES (?,?,?,?)';
-    con.query(sql,[player1,player2,rounds,tourId], function (err, result) {
-        con.end();
-        if (err) throw err;
-        else{
-            console.log(rounds);
-        }
-    })
-}
-
-
-/*<<<<<<<<<<<<<<<<<<<FUNCTION TO DETERMINE CURRENT STATUS>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-
-
- var currentStatus = function(a,tourId,cb){
-    console.log(tourId);
-    var con = create_connection();
-    var sql = (`SELECT players.player_name,players.tour_id,players.user_id,COUNT(matches.winner_id) AS POINTS FROM players LEFT JOIN matches ON matches.winner_id = players.player_name GROUP BY players.player_name having (players.user_id = ${a} and players.tour_id= ${tourId}) order by POINTS DESC;`);
-    con.query(sql, function (err, result) {
-        console.log(result);
-        con.end();
-        if (err) throw err;
-        cb(null,result)
-    })
-}
-
-
-//===============================GET FIXTURES++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-
-
-
 
 /*<<<<<<<<<<<<<<<<<<<FUNCTION TO GET SWISS PAIRING>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
@@ -272,6 +247,49 @@ function getSwissPairings(standings, matches, rounds,tourId,fixture,cb) {
 }
 
 
+/*<<<<<<<<<<<<<<<<<<<FUNCTION TO DETERMINE WINNER AND LOSER>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+
+var matchUpdates = function(player1,player2,rounds,tourId){
+    var con = create_connection();
+    var sql = 'INSERT INTO matches (winner_id,loser_id,round_id,tour_id) VALUES (?,?,?,?)';
+    con.query(sql,[player1,player2,rounds,tourId], function (err, result) {
+        con.end();
+        if (err) throw err;
+        else{
+            console.log(rounds);
+        }
+    })
+}
+
+
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+var getFinalResult = function(tourId,cb) {
+    var con = create_connection();
+    var sql = `select * from matches where tour_id =${tourId} order by matches_id desc limit 4 `;
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        cb(null,result);
+    })
+}
+
+
+
+
+
+
+/*var getFinalResult = function(player1,player2,rounds,tourId,cb){
+    var con = create_connection();
+    console.log(rounds + ">>>>>>>>>ROUNDS<<<<<<<<<<<" + tourId + "<<<<<<<<<<<<TOURNAMENT ID>>>>>>>>>>>>>>>>>.")
+    var sql = `select * from matches where tour_id = ${tourId} and round_id = ${rounds}`;
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        cb(null,result);
+    })
+}
+
+*/
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
@@ -286,5 +304,6 @@ module.exports = {
     displayTournament : displayTournament,
     currentStatus : currentStatus,
     userTournament : userTournament,
-    getPlayers : getPlayers
+    getPlayers : getPlayers,
+    getFinalResult:getFinalResult
 }

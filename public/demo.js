@@ -13,12 +13,16 @@ $(document).ready(
         });
 
         $( ".total" ).click(function() {
-            // var temp = $(this).attr("name")
-            var temp = Math.log2($(this).attr("name"))
-            if(Number.isInteger(temp) && count <= temp){
+            var temp = $(this).attr("name")
+            var x = Math.log2(temp)
+            if(Number.isInteger(x) && count <= x){
                 $( "#round" ).attr( "value", `${count}` );
                 $( "#sub" ).submit();
                 count++;
+
+                for(var i = 0;i < temp;i++){
+
+                }
             }
             else{
                 alert("Please Add Player in 2^n to Start Match");

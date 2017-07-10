@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="http://localhost:3050/demo.js"></script>
+  <script type="text/javascript" src="http://localhost:3000/demo.js"></script>
 </head>
 <body>
 
@@ -29,7 +29,7 @@
         </form>
         <form method='post' action='/api/getFixture'>
           <div class="form-group">
-            <input class='hidden' type="text" hidden value=<%= tourId %> name='round'>
+            <input class='hidden' type="text" hidden value="1" name="rounds">
             <input class='hidden' type="text" hidden value=<%= tourId %> name='tourId'>
           </div>
           <button type="submit" class="btn btn-default">Fixture</button>

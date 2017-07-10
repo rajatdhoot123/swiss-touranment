@@ -39,10 +39,15 @@
 
 
 
-  <form method='post' id="sub" action='/api/getPlayerStandings'>
+  <form method='post' target="_blank" id="sub" action='/api/getPlayerStandings'>
     <input class='hidden' type="text" hidden value=<%= fixture[0].tour_id %> name='tourId'>
     <input class='hidden' type="text" id="round" hidden value = "" name='rounds'>
     <button type="submit" class="hidden">Start Match </button>
   </form>
+
+
+  <div class="insertPlayer">
+
+  </div>
 </body>
 </html>
