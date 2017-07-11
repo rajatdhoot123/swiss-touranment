@@ -21,7 +21,7 @@ $(document).ready(
                 count++;
             }
             else{
-                alert("Please Add Player in 2^n to Start Match");
+                alert("Please Add Player in 2^n to Start Match Or You had Already Executed All Rounds");
             }
         })
     }

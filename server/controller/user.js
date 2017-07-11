@@ -55,7 +55,8 @@ function registerUser(users,cb){
   password = users.password;
 
   var hash = bcrypt.hashSync(password, saltRounds);
-  var sql = `INSERT INTO users (first_name,last_name,email,password) VALUES ('${uname}','${lname}','${email}','${hash}')`;
+  var sql = `INSERT INTO users (first_name,last_name,email,password)
+  VALUES ('${uname}','${lname}','${email}','${hash}')`;
   connection.query(sql, function (error, results) {
     if (error) {
       cb(error,0)

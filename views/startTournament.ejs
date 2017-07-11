@@ -15,33 +15,30 @@
     <p>Want to Start Tournament</p>
   </div>
 
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-sm-12 ">
-        <form method='post' action='/api/registerPlayers'>
-          <div class="form-group">
-            <input class='hidden' type="text" hidden value=<%= tourId %> name='tourId'>
-            <input type="text" placeholder="Enter player Name" name='player_name'>
-          </div>
-          <button type="submit" class="btn btn-default">Add Players</button>
-        </form>
-      </div>
-    </div>
-    <form action="/api/sub_tour_count" method="post">
+  <div class="container">
+
+    <form method='post' action='/api/registerPlayers'>
       <div class="form-group">
+        <label for="tourId">Player Name:</label>
+        <input class='hidden' type="text" hidden value=<%= tourId %> name='tourId'>
+        <input type="text" placeholder="Enter player Name" class="form-control" name='player_name'>
       </div>
-      <button type="submit" class="btn btn-default">View Tournament</button>
+      <button type="submit" class="btn btn-default">Add Players</button>
     </form>
   </div>
+  <form action="/api/sub_tour_count" method="post">
+    <div class="form-group">
+    </div>
+    <button type="submit" class="btn btn-default">View Tournament</button>
+  </form>
 
-<div>
-  <% for(var i=0;i<tour.length;i++) { %>
-  <a href="/inside_game/<%= tour[i].tour_id %>">
-  <button type="button" class="tourId btn btn-default"><%= tour[i].tour_name %></button>
- </a>
- <% } %>
-</div>
-</div>
+  <div>
+    <% for(var i=0;i<tour.length;i++) { %>
+    <a href="/inside_game/<%= tour[i].tour_id %>">
+      <button type="button" class="tourId btn btn-default"><%= tour[i].tour_name %></button>
+    </a>
+    <% } %>
+  </div>
 </body>
 </html>
 

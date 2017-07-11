@@ -9,23 +9,22 @@ function create_connection() {
       user     : 'root',
       password : 'mountblue',
       database : 'demo2'
-  });
+    });
     con.connect(function(err) {
       if (err) throw err;
       console.log("Connected!");
-  });
+    });
     return con;
 }
-
-
-
 
 
 
 /*<<<<<<<<<<<<<<<<<<<<<<<<<FUNCTION FOR REGISTER PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 var registerPlayers = function registerPlayers(players,tourId,a, cb) {
     var con = create_connection();
-    sql1 = `select count(*) as count from players where tour_id = ${tourId} and user_id = ${a} and player_name ='${players}';`;
+    sql1 = `select count(*) as count from players
+    where tour_id = ${tourId} and
+    user_id = ${a} and player_name ='${players}';`;
     con.query(sql1,function (error, results, fields) {
         if (error) throw error;
         else{
@@ -87,9 +86,9 @@ var displayTournament = function displayTournament(a,cb){
 
 function userTournament(tour_name,user_id,cb){
   var con = create_connection();
-  var sql = `select tour_name from tournament where user_id = ${user_id} and tour_name = '${tour_name}'`;
+  var sql = `select tour_name from tournament
+  where user_id = ${user_id} and tour_name = '${tour_name}'`;
   con.query(sql, function (error, results) {
-    console.log("=========================================",results.length)
     if (error) throw error;
     else{
         if(results.length === 0){
@@ -161,8 +160,12 @@ var deleteMatches = function(cb){
 var currentStatus = function(a,tourId,cb){
     console.log(tourId);
     var con = create_connection();
-    var sql = (`SELECT players.player_name,players.tour_id,players.user_id,COUNT(matches.winner_id) AS POINTS FROM players LEFT JOIN matches ON matches.winner_id = players.player_name GROUP BY players.player_name having (players.user_id = ${a} and players.tour_id= ${tourId}) order by POINTS DESC;`);
-    con.query(sql, function (err, result) {
+    var sql = (`SELECT players.player_name,
+        players.tour_id,players.user_id,COUNT(matches.winner_id) AS POINTS
+        FROM players LEFT JOIN matches ON matches.winner_id = players.player_name
+        GROUP BY players.player_name having (players.user_id = ${a}
+        and players.tour_id= ${tourId}) order by POINTS DESC;`);
+        con.query(sql, function (err, result) {
         console.log(result);
         con.end();
         if (err) throw err;
@@ -174,7 +177,7 @@ var currentStatus = function(a,tourId,cb){
 //=======================================Select All Players+++++++++++++++++++++++++++++++++
 
 
-var getPlayers = function getPlayers(a,tourId,cb) {
+var getPlayers = function (a,tourId,cb) {
     var con = create_connection();
     console.log(a +"______________________"+tourId+'_____________________________');
     var sql = (`select * from players where user_id = ${a} and tour_id = ${tourId}`);
@@ -192,13 +195,14 @@ var getPlayers = function getPlayers(a,tourId,cb) {
 
 
 
-var getPlayerStandings = function getPlayerStandings(tourId, a,fixture,rounds,cb) {
+var getPlayerStandings = function (tourId, a,fixture,rounds,cb) {
     var con = create_connection();
     var sql = (`SELECT players.player_name,players.tour_id,players.user_id,
         COUNT(matches.winner_id) AS POINTS FROM players LEFT JOIN matches ON
         matches.winner_id = players.player_name
         GROUP BY players.player_name having players.user_id = ${a} and players.tour_id= ${tourId}
         ORDER BY POINTS DESC`);
+
         con.query(sql, function (err,result) {
         if (err) throw err;
         var standings = result;

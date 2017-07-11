@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var parse = bodyParser.urlencoded({ extended: true });
 var router = express.Router();
 var session = require('express-session');
-var a = 0;
+//var a = 0;
 module.exports=function (){
 
   router.get('/',function(req,res){
@@ -18,7 +18,7 @@ module.exports=function (){
   router.post('/registerPlayers', parse ,function(req,res){
     var players = req.body.player_name;
     var tourId = req.body.tourId;
-    player.registerPlayers(players,tourId,a,function(err,result){
+    player.registerPlayers(players,tourId,req.session.name,function(err,result){
       if (err) {
         console.log("error ocurred",err);
         res.send({
@@ -44,7 +44,6 @@ module.exports=function (){
           "failed":err
         })
       }else{
-        a = result[0].user_id;
         req.session.name=result[0].user_id;
         console.log(req.session.name + "=======================================");
         //res.cookie('user','email',{signed:true});
@@ -83,7 +82,7 @@ module.exports=function (){
     console.log("Current Status Called");
     var tourId = req.body.tourId;
     console.log(tourId);
-    player.currentStatus(a,tourId,function(err,result){
+    player.currentStatus(req.session.name,tourId,function(err,result){
       if (err) {
         console.log("error ocurred",err);
         res.send({
@@ -107,7 +106,7 @@ module.exports=function (){
 
 
   router.post('/getPlayers',function(req,res){
-    player.getPlayers(a,function(error,results){
+    player.getPlayers(req.session.name,function(error,results){
       if (error) {
         console.log("error ocurred",error);
         res.send({
@@ -124,7 +123,7 @@ module.exports=function (){
   /*<<<<<<<<<<<<<<<<<<<User Tournament>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
   router.post('/usertournament',parse,function(req,res){
     var tour_name = req.body.tour_name;
-    player.userTournament([tour_name],[a],function(error,results){
+    player.userTournament([tour_name],[req.session.name],function(error,results){
       if (error) {
         console.log("error ocurred",error);
         res.send({
@@ -145,7 +144,7 @@ module.exports=function (){
 
   /*<<<<<<<<<<<<<<<<<<<Sub Tournament Count>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
   router.post('/sub_tour_count',function(req,res){
-    player.displayTournament(a,function(error,results){
+    player.displayTournament(req.session.name,function(error,results){
       if (error) {
         console.log("error ocurred",error);
         res.send({
@@ -170,7 +169,7 @@ router.post('/getPlayerStandings',function(req,res){
   var rounds = req.body.rounds;
   console.log(tourId +"????????????????????-"+rounds+"-----");
   var fixture = false;
-  player.getPlayerStandings(tourId,a,fixture,rounds,function(error,results){
+  player.getPlayerStandings(tourId,req.session.name,fixture,rounds,function(error,results){
     if (error) {
       console.log("error ocurred",error);
       res.send({
@@ -194,7 +193,7 @@ router.post('/getFixture',function(req,res){
   var tourId = req.body.tourId;
   console.log(">>>>>>>>>tourId<<<<<<<<<<<<<<"+tourId)
   var fixture = true;
-  player.getPlayerStandings(tourId,a,fixture,rounds,function(error,results){
+  player.getPlayerStandings(tourId,req.session.name,fixture,rounds,function(error,results){
     if (error) {
       console.log("error ocurred",error);
       res.send({

@@ -20,10 +20,10 @@ app.use(express.static(path.join(__dirname,'/public')));
 var FileStore = require('session-file-store')(session);
 
 app.use(session({
-    secret: 'winter is coming',
+    secret: 'My secret coming',
     //store: new FileStore(),
-    resave:'false',
-    saveUninitialized :'true',
+    resave:'true',
+    saveUninitialized: true,
     cookie : 'maxAge: 1000*60*2'}));
 
 app.use(function(req,res,next){
@@ -75,7 +75,7 @@ app.get('/inside_game/:id', checkSignIn, function(req, res) {
 });
 
 
-app.get('/startMatch', function(req, res) {
+app.get('/startMatch',checkSignIn, function(req, res) {
     tour_id = req.params.id;
     res.status(200).sendFile(path.join(__dirname + '/views/tourdetail.html'));
 });
