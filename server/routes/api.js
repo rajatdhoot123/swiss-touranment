@@ -26,7 +26,7 @@ module.exports=function (){
           "failed":"error ocurred"
         })
       }else{
-        res.redirect('/inside_game/'+tourId);
+        res.json(result);
       }
     });
   });
@@ -131,19 +131,19 @@ module.exports=function (){
           "failed":"error ocurred"
         })
       }else{
-        console.log('Tournament Created ', results);
+        console.log('Tournament Created-------------------------- ', results.insertId);
         /*res.send({
           "code":200,
           "success":"user registered sucessfully"
         });*/
-        res.redirect('/tournament');
+        res.send(JSON.stringify({'result' : results.insertId}));
       }
     });
   });
 
 
   /*<<<<<<<<<<<<<<<<<<<Sub Tournament Count>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-  router.post('/sub_tour_count',function(req,res){
+  router.get('/sub_tour_count',function(req,res){
     player.displayTournament(req.session.name,function(error,results){
       if (error) {
         console.log("error ocurred",error);
@@ -154,7 +154,7 @@ module.exports=function (){
       }else{
         console.log('Player Counted ', results);
 
-        res.render('tournament',{tour:results});
+        res.send(JSON.stringify(results));
       }
     });
   });
@@ -240,6 +240,26 @@ router.post('/getFinalResult',function(req,res){
       })
     }else{
       res.render('try',{work:results});
+    }
+  });
+});
+
+//>>>>>>>>>>>>>>>>>>>>>DELETE PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+router.get('/deletePlayers/:id',function(req,res){
+  //var pid = req.body.tourId;
+  var pid = req.params.id;
+  console.log(pid);
+  player.deletePlayers(pid,function(error,results){
+    if (error) {
+      console.log("error ocurred",error);
+      res.send({
+        "code":400,
+        "failed":"error ocurred"
+      })
+    }else{
+      res.redirect('/tournament');
     }
   });
 });

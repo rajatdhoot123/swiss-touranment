@@ -1,3 +1,4 @@
+
   <!DOCTYPE html>
   <html lang="en">
   <head>
@@ -21,7 +22,7 @@
       </form>
     </div>
     <div class="container">
-    <h2>CREATE TOURNAMENT</h2>
+    <h2>This is From HandleBars</h2>
       <div class="row">
         <div class="col-sm-8">
             <div class="form-group">
@@ -31,6 +32,14 @@
             <div class="col-sm-4">
             <button type="submit" id="usertournament" class="btn btn-default">Submit</button>
             </div>
+          </div>
+          <div>
+                <tr>
+                  <td>{{ tour_name }}</td>
+                  <td>{{ name }}</td>
+                  <td>{{ homepage }}</td>
+                  <td>{{ score }}</td>
+                </tr>
           </div>
 
           <div class="col-sm-12">
@@ -44,17 +53,6 @@
 
       <div class="viewtournament">
 
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Tournament Name</th>
-              <th>Tournament Status</th>
-            </tr>
-          </thead>
-          <tbody>
-
-          </tbody>
-        </table>
       </div>
 
   </body>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Tournament</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+  <div class="jumbotron text-center">
+    <h1>Welcome to Tournament</h1>
+    <p>Want to Start Tournament</p>
+    <form action="/logout" method="get">
+      <div class="form-group">
+      </div>
+      <button type="submit" class="btn btn-default">Logout</button>
+    </form>
+    </div>
+
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <h2>ENTER THE NAME OF TOURNAMENT</h2>
+        <!-- <p>  <button type="button" class="btn btn-primary">Click Me</button></p> -->
+        <form action="/api/usertournament" method="post">
+          <div class="form-group">
+            <label for="tour_name">Tournament Name:</label>
+            <input type="text" class="form-control" id="tour_name" placeholder="Tournament" name="tour_name" required>
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+        <form action="/api/sub_tour_count" method="post">
+          <div class="form-group">
+          </div>
+          <button type="submit" class="btn btn-default">View Tournament</button>
+        </form>
+      </div>
+    </div>
+
+    <div>
+      <% for(var i=0;i<tour.length;i++) { %>
+      <a href="/inside_game/<%= tour[i].tour_id %>">
+       <button type="button" class="tourId btn btn-default"><%= tour[i].tour_name %></button>
+     </a>
+     <% } %>
+   </div>
+ </div>
+</body>
+</html>
+
+
+

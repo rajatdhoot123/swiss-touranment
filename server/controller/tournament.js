@@ -70,7 +70,7 @@ var countPlayers = function countPlayers(a,cb){
 
 var displayTournament = function displayTournament(a,cb){
     var con=create_connection();
-    var sql=(`select tour_id, tour_name from tournament where user_id = ${a}`);
+    var sql=(`select tour_id,status, tour_name from tournament where user_id = ${a}`);
     con.query(sql,function(err,result){
         con.end();
         if(err) {
@@ -129,9 +129,10 @@ function insertPlayers(id,cb){
 */
 
 /*<<<<<<<<<<<<<<<<<<<<<<<<<FUNCTION FOR DELETE PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-var deletePlayers = function(cb){
+var deletePlayers = function(uid,cb){
     var con = create_connection();
-    con.query('TRUNCATE TABLE PLAYERS;', function (error, results) {
+    var sql = `delete from players where id = ${uid}`
+    con.query(sql, function (error, results) {
         con.end();
         if (error) {
             cb(error, 0);

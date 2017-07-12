@@ -5,6 +5,7 @@ var user = require('./server/controller/user');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 const api = require('./server/routes/api')();
+var hbs = require('express-handlebars');
 var path = require('path');
 var app = express();
 var session = require('express-session');
@@ -13,11 +14,24 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 var router = express.Router();
-app.set('view engine', 'ejs');
-app.set('views',path.join(__dirname,'./views'));
+/*app.set('view engine', 'ejs');*/
+app.set('views',path.join(__dirname,'/views'));
 app.use(express.static(path.join(__dirname,'/public')));
 
 var FileStore = require('session-file-store')(session);
+
+
+/*app.engine('handlebars',hbs({layoutsDir : __dirname + '/views'}));
+app.set('views', path.join(__dirname, '/views'));*/
+
+/*app.engine('handlebars',hbs({defaultLayout : 'layouts.handlebars', layoutsDir : __dirname + '/views/layouts'}));
+app.set('views', path.join(__dirname, '/views'));*/
+/*app.set('view engine', 'ejs');*/
+
+
+app.engine('hbs',hbs({extname:'hbs',defaultLayout : 'layouts',layoutsDir : __dirname + '/views/layouts/'}))
+app.set('views',path.join(__dirname,'views'));
+app.set('view engine','hbs');
 
 app.use(session({
     secret: 'My secret coming',
@@ -69,9 +83,14 @@ app.route('/login')
 */
 
 
-app.get('/inside_game/:id', checkSignIn, function(req, res) {
-    res.render(path.join(__dirname + '/views/inside_game.ejs'),
-        {'tourId' : req.params.id});
+app.get('/inside_game/:id/:name', checkSignIn, function(req, res) {
+    res.render('index1',{title: 'Tournament ',
+        tourId : req.params.id,
+        tourName : req.params.name,
+        condition:false});
+    //res.status(200).sendFile(path.join(__dirname + '/views/inside_game.html'));
+    /*res.render(path.join(__dirname + '/views/inside_game.ejs'),
+    {'tourId' : req.params.id});*/
 });
 
 
@@ -92,7 +111,7 @@ function checkSignIn(req, res, next){
 }
 
 app.get('/logout', function(req,res){
-   req.session.destroy(function (err) {
+ req.session.destroy(function (err) {
     console.log("COOKIE DELETED");
     res.redirect('/');
 });

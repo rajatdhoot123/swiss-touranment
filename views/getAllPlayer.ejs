@@ -40,11 +40,12 @@
 
     <div>
       <% for(var i=0;i<allPlayer.length;i++) { %>
-      <a href="/inside_game/<%= allPlayer[i].tour_id %>">
+      <a href="/api/deletePlayers/<%= allPlayer[i].id %>">
         <button type="button" class="tourId btn btn-default"><%= allPlayer[i].player_name %></button>
       </a>
       <% } %>
     </div>
+    <H3>TO DELETE PLAYER CLICK ON IT.....</H3>
     <div>
       <a href="/inside_game/<%= allPlayer[1].tour_id %>">
         <button type="button" class="tourId btn btn-default"> Back </button>
