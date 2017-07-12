@@ -1,15 +1,21 @@
     $(document).ready(function() {
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<DISPLAY TOURNAMENT>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
        var displayTournament = function(){
         $.get( "/api/sub_tour_count", function( data ) {
           var temp = JSON.parse(data)
           for (var i = 0 ; i < temp.length ; i ++){
-            $('.table').find( "tbody" ).append( '<tr>'+'<td>' + `<a href="/inside_game/${temp[i].tour_id}/${temp[i].tour_name}">${temp[i].tour_name}</a>` + '</td>'+'<td>' + temp[i].status  + '</td>'+'</tr>' );
+            $('#tournamet').find( "tbody" ).append( '<tr>'+'<td>' + `<a href="/inside_game/${temp[i].tour_id}/${temp[i].tour_name}">${temp[i].tour_name}</a>` + '</td>'+'<td>' + temp[i].status  + '</td>'+'</tr>' );
 
                   /*$('.viewtournament').append( '<tr><td>' + temp[i].tour_id  + '</td></tr>' );
                   $('.viewtournament').append( '<tr><td>' + temp[i].tour_name  + '</td></tr>' );*/
             }
         })
     }
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<GET ALL PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<DISPLAY USER TOURNAMENT>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
 
     displayTournament();
     $('#usertournament').on('click',function(event) {
@@ -27,7 +33,6 @@
         })
 
         .then(function(result) {
-            alert(JSON.parse(result.result))
             $('.table').find( "tbody" ).append( '<tr>'+'<td>' + `<a href="/inside_game/${result.result}/${formData.tour_name}">${formData.tour_name}</a>` + '</td>'+'<td>' + 'NOT STARTED' + '</td>'+'</tr>' );
         });
         event.preventDefault();
@@ -35,12 +40,12 @@
 
 
 
-    $.get( "/inside_game/:id/:name", function( data ) {
-          alert(req.params.id + "++++++++++++" + req.params.name)
-        })
 
 
 
 
+
+/*    $.get( "/inside_game/:id/:name", function( data ) {
+        })*/
 
 });

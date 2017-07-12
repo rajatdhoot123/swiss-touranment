@@ -161,11 +161,18 @@ var deleteMatches = function(cb){
 var currentStatus = function(a,tourId,cb){
     console.log(tourId);
     var con = create_connection();
-    var sql = (`SELECT players.player_name,
+var sql = `SELECT players.player_name,players.user_id,players.tour_id,
+COUNT(matches.winner_id) AS Win,
+COUNT(matches.loser_id) AS loss FROM
+ players LEFT JOIN matches ON matches.winner_id = players.player_name
+ GROUP BY players.player_name having (players.user_id = ${a} and players.tour_id= ${tourId}) order by Win DESC`;
+
+
+/*    var sql = (`SELECT players.player_name,
         players.tour_id,players.user_id,COUNT(matches.winner_id) AS POINTS
         FROM players LEFT JOIN matches ON matches.winner_id = players.player_name
         GROUP BY players.player_name having (players.user_id = ${a}
-        and players.tour_id= ${tourId}) order by POINTS DESC;`);
+        and players.tour_id= ${tourId}) order by POINTS DESC;`);*/
         con.query(sql, function (err, result) {
         console.log(result);
         con.end();
@@ -180,15 +187,15 @@ var currentStatus = function(a,tourId,cb){
 
 var getPlayers = function (a,tourId,cb) {
     var con = create_connection();
-    console.log(a +"______________________"+tourId+'_____________________________');
     var sql = (`select * from players where user_id = ${a} and tour_id = ${tourId}`);
     con.query(sql, function (err, result) {
         con.end();
         if (err) {
             cb(err,null)
         }
-        else
+        else{
             cb(null,result)
+        }
     })
 }
 

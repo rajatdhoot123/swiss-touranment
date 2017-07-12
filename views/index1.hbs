@@ -1,15 +1,47 @@
 <div class="container">
-    <div class="row">
-        <div class="col-sm-4 col-md-4">
-            <h1> {{tourName}} </h1>
-            <p> </p>
-            <p> </p>
-            <p> </p>
+ <div class="row">
+  <div class="col-sm-12 col-md-12">
+  <button type="button" class="btn pull-right">Start Match</button>
+  </div>
+  </div>
+    <div class="col-sm-4 col-md-4">
+      <h1> {{tourName}} </h1>
+      <p class="hidden tourId">{{tourId}}</p>
+      <button type="button" id="addPlay" class="btn addPlay">Add Players</button>
+      <input type="text" placeholder="Enter Player Name" name="pname">
+      <div class="viewtournament">
+
+        <div>
+          <table class="table" id="playerId">
+            <thead>
+              <tr>
+                <th>Player Name</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
         </div>
-        <div class="col-sm-8 col-md-8">
-            <h3>Column 2</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+      </div>
+    </div>
+    <div class="col-sm-8 col-md-8">
+      <h3>Points Table</h3>
+      <div>
+          <table class="table" id="currentStatus">
+            <thead>
+              <tr>
+                <th>Player Name</th>
+                <th>Tour Id</th>
+                <th>User Id</th>
+                <th>Points</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
         </div>
     </div>
+  </div>
 </div>

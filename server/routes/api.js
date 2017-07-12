@@ -16,7 +16,7 @@ module.exports=function (){
 
   /*<<<<<<<<<<<<<<<<<<<Register Players>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
   router.post('/registerPlayers', parse ,function(req,res){
-    var players = req.body.player_name;
+    var players = req.body.pname;
     var tourId = req.body.tourId;
     player.registerPlayers(players,tourId,req.session.name,function(err,result){
       if (err) {
@@ -78,9 +78,9 @@ module.exports=function (){
   /*<<<<<<<<<<<<<<<<<<<REGISTER USER>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
   /*<<<<<<<<<<<<<<<<<<<CURRENT STATUS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-  router.post('/currentStatus', function (req, res) {
+  router.get('/currentStatus/:tourId', function (req, res) {
     console.log("Current Status Called");
-    var tourId = req.body.tourId;
+    var tourId = req.params.tourId;
     console.log(tourId);
     player.currentStatus(req.session.name,tourId,function(err,result){
       if (err) {
@@ -92,7 +92,7 @@ module.exports=function (){
       }else{
         console.log('The solution is:------------------------------------ ', result);
 
-        res.render('currentstatus',{current:result});
+        res.send(JSON.stringify(result));
         /*res.send({
           "code":200,
           "success":"user registered sucessfully"
@@ -105,8 +105,9 @@ module.exports=function (){
 
 
 
-  router.post('/getPlayers',function(req,res){
-    player.getPlayers(req.session.name,function(error,results){
+  router.get('/getPlayers/:id',function(req,res){
+    console.log("req.params.id"+req.params.id+"req.params.id"+req.params.id)
+    player.getPlayers(req.session.name,req.params.id,function(error,results){
       if (error) {
         console.log("error ocurred",error);
         res.send({
@@ -114,8 +115,8 @@ module.exports=function (){
           "failed":"error ocurred"
         })
       }else{
-        console.log('App Players Selected ', results);
-        res.render('tournament',{allPlayer : results});
+        console.log(results+"_____________________________________________________")
+        res.send(JSON.stringify(results));
       }
     });
   });
