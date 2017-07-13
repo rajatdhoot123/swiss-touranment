@@ -6,8 +6,6 @@
           for (var i = 0 ; i < temp.length ; i ++){
             $('#tournamet').find( "tbody" ).append( '<tr>'+'<td>' + `<a href="/inside_game/${temp[i].tour_id}/${temp[i].tour_name}">${temp[i].tour_name}</a>` + '</td>'+'<td>' + temp[i].status  + '</td>'+'</tr>' );
 
-                  /*$('.viewtournament').append( '<tr><td>' + temp[i].tour_id  + '</td></tr>' );
-                  $('.viewtournament').append( '<tr><td>' + temp[i].tour_name  + '</td></tr>' );*/
             }
         })
     }
@@ -18,6 +16,9 @@
 
 
     displayTournament();
+
+
+
     $('#usertournament').on('click',function(event) {
         var formData = {
             'tour_name'         : $('input[name=tour_name]').val()

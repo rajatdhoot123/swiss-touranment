@@ -187,7 +187,7 @@ COUNT(matches.loser_id) AS loss FROM
 
 var getPlayers = function (a,tourId,cb) {
     var con = create_connection();
-    var sql = (`select * from players where user_id = ${a} and tour_id = ${tourId}`);
+    var sql = (`select * from players where user_id = ${a} and tour_id != ${tourId}`);
     con.query(sql, function (err, result) {
         con.end();
         if (err) {
@@ -293,19 +293,32 @@ var getFinalResult = function(tourId,cb) {
 
 
 
-
-
-/*var getFinalResult = function(player1,player2,rounds,tourId,cb){
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+var getTotalPlayers = function(tourId,a,cb) {
+    console.log(tourId + "++++++++++++++++++++++++++++"+ a+ "++++++++++++++++++++++++++++")
     var con = create_connection();
-    console.log(rounds + ">>>>>>>>>ROUNDS<<<<<<<<<<<" + tourId + "<<<<<<<<<<<<TOURNAMENT ID>>>>>>>>>>>>>>>>>.")
-    var sql = `select * from matches where tour_id = ${tourId} and round_id = ${rounds}`;
+    var sql = `select * from players where tour_id =${tourId} and user_id = ${a} `;
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        cb(null,result);
+    })
+}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+var updateMatch = function(users,cb) {
+    var winner = users.winner;
+    var loser = users.loser;
+    var tourId = ['1','1','1','1'];
+    var round = ['1','1','1','1'];
+    var con = create_connection();
+    var sql = `insert into matches (round_id,winner_id,loser_id,tour_id) values ([${round}],[${winner}],[${loser}],[${tourId}]); `;
     con.query(sql, function (err, result) {
         if (err) throw err;
         cb(null,result);
     })
 }
 
-*/
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
@@ -321,5 +334,7 @@ module.exports = {
     currentStatus : currentStatus,
     userTournament : userTournament,
     getPlayers : getPlayers,
-    getFinalResult:getFinalResult
+    getFinalResult:getFinalResult,
+    getTotalPlayers:getTotalPlayers,
+    updateMatch:updateMatch
 }

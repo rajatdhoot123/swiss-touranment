@@ -54,6 +54,26 @@ module.exports=function (){
 
   /* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
+  router.post('/updateMatch',parse, function (req, res) {
+    var users = req.body;
+    console.log(req.body.winner)
+    console.log(req.body.loser)
+    console.log(req.body.tourId)
+    player.updateMatch(users,function(err,result){
+      if (err) {
+        console.log("error ocurred",err);
+        res.send({
+          "code":400,
+          "failed":"error ocurred"
+        })
+      }else{
+        console.log('The solution is: ', result);
+        res.json(result);
+      }
+    });
+  });
+
+
 
   /*<<<<<<<<<<<<<<<<<<<REGISTER USER>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
@@ -115,11 +135,30 @@ module.exports=function (){
           "failed":"error ocurred"
         })
       }else{
-        console.log(results+"_____________________________________________________")
         res.send(JSON.stringify(results));
       }
     });
   });
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+  router.get('/getTotalPlayers/:tourId',function(req,res){
+    player.getTotalPlayers(req.params.tourId,req.session.name,function(error,results){
+      if (error) {
+        console.log("error ocurred",error);
+        res.send({
+          "code":400,
+          "failed":"error ocurred"
+        })
+      }else{
+        res.send(JSON.stringify(results));
+      }
+    });
+  });
+
+
+
 
   /*<<<<<<<<<<<<<<<<<<<User Tournament>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
   router.post('/usertournament',parse,function(req,res){
@@ -167,8 +206,7 @@ module.exports=function (){
 
 router.post('/getPlayerStandings',function(req,res){
   var tourId = req.body.tourId;
-  var rounds = req.body.rounds;
-  console.log(tourId +"????????????????????-"+rounds+"-----");
+  var rounds = req.body.round;
   var fixture = false;
   player.getPlayerStandings(tourId,req.session.name,fixture,rounds,function(error,results){
     if (error) {
@@ -190,20 +228,20 @@ router.post('/getPlayerStandings',function(req,res){
 
 router.post('/getFixture',function(req,res){
   console.log('Current Players');
-  var rounds = Math.log2(req.body.rounds);
+  var rounds = req.body.round;
   var tourId = req.body.tourId;
   console.log(">>>>>>>>>tourId<<<<<<<<<<<<<<"+tourId)
   var fixture = true;
   player.getPlayerStandings(tourId,req.session.name,fixture,rounds,function(error,results){
     if (error) {
-      console.log("error ocurred",error);
+        throw error
       res.send({
         "code":400,
         "failed":"error ocurred"
       })
     }else{
-      console.log(results.length+"==========================================");
-      res.render('fixture',{fixture:results});
+      console.log(JSON.stringify(results)+"=========+++++++++++++++++_________________-------------------")
+      res.send(JSON.stringify(results));
     }
   });
 });
@@ -211,7 +249,6 @@ router.post('/getFixture',function(req,res){
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<GET ALL PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
 
 router.post('/getAllPlayers',function(req,res){
-  console.log("Get Players")
   var tourId = req.body.tourId;
   console.log(tourId + "+================Tour Id"+req.session.name+"========================userId")
   player.getPlayers(req.session.name,tourId,function(error,results){
