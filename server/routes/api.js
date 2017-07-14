@@ -56,9 +56,7 @@ module.exports=function (){
 
   router.post('/updateMatch',parse, function (req, res) {
     var users = req.body;
-    console.log(req.body.winner)
-    console.log(req.body.loser)
-    console.log(req.body.tourId)
+
     player.updateMatch(users,function(err,result){
       if (err) {
         console.log("error ocurred",err);
@@ -113,13 +111,67 @@ module.exports=function (){
         console.log('The solution is:------------------------------------ ', result);
 
         res.send(JSON.stringify(result));
-        /*res.send({
-          "code":200,
-          "success":"user registered sucessfully"
-        });*/
       }
     });
   });
+
+
+
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++==
+
+
+
+
+  router.get('/getRoundFixture/:tourId/:round', function (req, res) {
+    console.log("Current Status Called");
+    var tourId = req.params.tourId;
+    var round = req.params.round;
+    console.log(tourId +"++++++++++++++++++++++++++++++++++++"+round+"------------------------------")
+    console.log(tourId);
+    player.getRoundFixture(round,tourId,function(err,result){
+      if (err) {
+        console.log("error ocurred",err);
+        res.send({
+          "code":400,
+          "failed":"error ocurred"
+        })
+      }else{
+        console.log(result)
+        res.send(JSON.stringify(result));
+      }
+    });
+  });
+
+
+
+
+
+/*============================Get Current Players=====================================*/
+
+
+
+  router.get('/getCurrentPlayers/:tourId', function (req, res) {
+    var tourId = req.params.tourId;
+    player.currentStatus(req.session.name,tourId,function(err,result){
+      if (err) {
+        console.log("error ocurred",err);
+        res.send({
+          "code":400,
+          "failed":"error ocurred"
+        })
+      }else{
+        console.log('The solution is:------------------------------------ ', result);
+
+        res.send(JSON.stringify(result));
+      }
+    });
+  });
+
+
+
+
+
 
   /*<<<<<<<<<<<<<<<<<<<CURRENT STATUS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
@@ -230,7 +282,6 @@ router.post('/getFixture',function(req,res){
   console.log('Current Players');
   var rounds = req.body.round;
   var tourId = req.body.tourId;
-  console.log(">>>>>>>>>tourId<<<<<<<<<<<<<<"+tourId)
   var fixture = true;
   player.getPlayerStandings(tourId,req.session.name,fixture,rounds,function(error,results){
     if (error) {

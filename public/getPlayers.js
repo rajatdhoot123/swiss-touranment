@@ -2,8 +2,9 @@ var rounds = 0;
 
 
 $(document).ready(function() {
-
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Players From Other Tournament>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     var getPlayers = function(){
+        alert('get Players Called')
         $.get( "/api/getPlayers/"+$('.tourId').text(), function( data ) {
           var totalPlayers = JSON.parse(data)
           for (var i = 0 ; i < totalPlayers.length ; i ++){
@@ -14,8 +15,15 @@ $(document).ready(function() {
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
+    var getCurrentPlayers = function(){
+        alert('get Players Called')
+        $.get( "/api/getCurrentPlayers/"+$('.tourId').text(), function( data ) {
+          var currentPlayers = JSON.parse(data)
+          for (var i = 0 ; i < currentPlayers.length ; i ++){
+            $('#getCurrentPlayers').find( "tbody" ).append( '<tr>'+'<td>' + `${currentPlayers[i].player_name}` + '</td>'+'</tr>' );
+        }
+    })
+    }
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>CURRENT STATUS<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -27,6 +35,20 @@ var currentStatus = function(){
     }
 })
 }
+
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+var getRoundFixture = function(){
+    $.get( "/api/getRoundFixture"+$('.tourId').text(), function( data ) {
+       var currentPlayers = JSON.parse(data)
+      for (var i = 0 ; i < currentPlayers.length ; i ++){
+        $('#currentStatus').find( "tbody" ).append( '<tr>'+'<td>' + currentPlayers[i].player_name + '</td>'+'<td>' + currentPlayers[i].tour_id  + '</td>'+'<td>' + currentPlayers[i].Win  + '</td>'+'<td>' + currentPlayers[i].loss  + '</td>'+'</tr>' );
+    }
+})
+}
+
 
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -46,7 +68,7 @@ $('#addPlay').on('click',function(event) {
         })
 
     .then(function(result) {
-        $('#playerId').find( "tbody" ).append( '<tr>'+'<td>' + formData.pname  + '</td>'+'</tr>' );
+        /*$('#playerId').find( "tbody" ).append( '<tr>'+'<td>' + formData.pname  + '</td>'+'</tr>' );*/
         $('#currentStatus').find( "tbody" ).append( '<tr>'+'<td>' + formData.pname + '</td>'+'<td>' + formData.tourId  + '</td>'+'<td>' + 0  + '</td>'+'<td>' + 0  + '</td>'+'</tr>' );
     });
     event.preventDefault();
@@ -62,9 +84,11 @@ $('#addPlay').on('click',function(event) {
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 currentStatus();
 getPlayers();
+getCurrentPlayers();
 
 
 $(document).on("click", "#roundbtn", function(event){
+    $(this).attr("disabled", true);
 //$('.str_match').on('click','#roundbtn',function(event) {
     var formData = {
         'round'         : $(this).attr("value"),
@@ -80,8 +104,7 @@ $(document).on("click", "#roundbtn", function(event){
 
     .then(function(result) {
         for (var i = 0;i < result.length ; i++){
-            alert(result[i].player_name)
-            $('#fixtureB').find( "tbody" ).append('<tr>'+'<td>' + `<input type="radio" name="pname${i}" value="${result[i].player_name}">`+'</td>'+'<td>'+ result[i++].player_name +'</td>' +'<td>'+ `<input type="radio" name="pname${i-1}" value="${result[i].player_name}" >` +'</td>'+ '<td>' + result[i].player_name  + '</td>' + '</tr>');
+            $('#fixtureB').find( "tbody" ).append('<tr>'+'<td>' + `<input type="radio" name="pname${i}" value="${result[i].player_name}" id="${formData.round}">`+'</td>'+'<td>'+ result[i++].player_name +'</td>' +'<td>'+ `<input type="radio" name="pname${i-1}" value="${result[i].player_name}" id="${formData.round}">` +'</td>'+ '<td>' + result[i].player_name  + '</td>' + '</tr>');
         }
     });
     event.preventDefault();
@@ -94,23 +117,24 @@ $(document).on("click", "#roundbtn", function(event){
 
 $(document).on("click", "#radioHandle", function(event){
     var winner = [];
-    var loser = []
+    var loser = [];
+    var tourId = [];
+    var round = [];
     $(':radio').each(function(){
         if($(this).is(':checked')){
             winner.push($(this).val());
+            round.push(($(this).attr('id')))
         }
         else{
             loser.push($(this).val());
+            tourId.push($('.tourId').text());
         }
     });
-
-
-
-
         var formData = {
         'winner'         : winner,
         'loser'          : loser,
-        'tourId'        : $('.tourId').text()
+        'tourId'        : tourId,
+        'round'         : round,
     };
     $.ajax({
         type        : 'post',
@@ -120,17 +144,28 @@ $(document).on("click", "#radioHandle", function(event){
         encode      : true
     })
     .then(function(result) {
-        alert('in then')
+        alert('current Status called')
+        currentStatus();
     })
 
     event.preventDefault();
 })
 
 
+$(document).on("click", ".getStanding", function(event){
+    round = $(this).attr('value');
+    getRoundFixture();
+});
 
 
-
-
+var getRoundFixture = function(){
+    $.get( "/api/getRoundFixture/"+$('.tourId').text()+'/'+round, function( data ) {
+       var result = JSON.parse(data)
+       for (var i = 0; i < result.length;i++){
+       $('#currentFixtureBody').find( "tbody" ).append('<tr>'+'<td>'+ result[i].winner_id +'</td>' + '<td>' + result[i].loser_id  + '</td>' + '</tr>');
+    }
+   })
+}
 
 
 
@@ -145,7 +180,7 @@ $('.str_match').on('click',function(event) {
       if(Number.isInteger(Math.log2(tplayers.length))){
         $('#startBody').text('You Can Start Match Now')
         for (var i = 1;i <= rounds ; i++){
-            $('#rounds').find( "tbody" ).append('<tr>'+'<td>' + [i]  + '</td>'+'<td>' + 'status'  + '</td>' +'<td>' + `<button type="button" class="btn btn-info btn-sm str_match" data-toggle="modal" data-target="#myModal2" id="roundbtn" value="${i}">Execute Round ${i}</button>`+ '</td>'+'<td>' + `<a href="Link">Name</a>`+ '</td>'+ '</tr>' );
+            $('#rounds').find( "tbody" ).append('<tr>'+'<td>' + [i]  + '</td>'+'<td>' + 'status'  + '</td>' +'<td>' + `<button type="button" class="btn btn-info btn-sm str_match" data-toggle="modal" data-target="#myModal2" id="roundbtn" value="${i}">Execute Round ${i}</button>`+ '</td>'+'<td>' + `<button type="button" class="btn btn-info btn-sm getStanding" data-toggle="modal" data-target="#myModal3" id="currentFixture" value="${i}">Standing</button>`+ '</td>'+ '</tr>' );
         }
     }
     else{

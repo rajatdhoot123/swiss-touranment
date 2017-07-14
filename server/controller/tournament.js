@@ -199,6 +199,31 @@ var getPlayers = function (a,tourId,cb) {
     })
 }
 
+//++++++++++++++++++++++++_____________________________________+++++++++++++++++++++++++++++++++++++
+
+
+
+var getCurrentPlayers = function (a,tourId,cb) {
+    var con = create_connection();
+    var sql = (`select * from players where user_id = ${a} and tour_id = ${tourId}`);
+    con.query(sql, function (err, result) {
+        con.end();
+        if (err) {
+            cb(err,null)
+        }
+        else{
+            cb(null,result)
+        }
+    })
+}
+
+
+
+
+
+
+
+
 /*<<<<<<<<<<<<<<<<<<<<<<<<<Get Players Standing>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
 
@@ -215,7 +240,6 @@ var getPlayerStandings = function (tourId, a,fixture,rounds,cb) {
         if (err) throw err;
         var standings = result;
         cb(0,result)
-        // For matches
         con.query(sql, function(err, result) {
             var sql = `select winner_id,loser_id,tour_id FROM matches where tour_id = ${tourId}`;
             con.query(sql,function(err,result){
@@ -291,6 +315,19 @@ var getFinalResult = function(tourId,cb) {
 }
 
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+var getRoundFixture = function(round,tourId,cb) {
+    var con = create_connection();
+    var sql = `select winner_id,loser_id from matches where tour_id =${tourId} and round_id = ${round} `;
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        cb(null,result);
+    })
+}
+
+
 
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -307,13 +344,19 @@ var getTotalPlayers = function(tourId,a,cb) {
 
 
 var updateMatch = function(users,cb) {
+    var arr = []
     var winner = users.winner;
     var loser = users.loser;
-    var tourId = ['1','1','1','1'];
-    var round = ['1','1','1','1'];
+    var tourId = users.tourId;
+    var round = users.round;
+    for(var i =0 ; i < winner.length ; i++){
+        arr.push([winner[i],loser[i],tourId[i],round[i]])
+        console.log(arr)
+    }
+
     var con = create_connection();
-    var sql = `insert into matches (round_id,winner_id,loser_id,tour_id) values ([${round}],[${winner}],[${loser}],[${tourId}]); `;
-    con.query(sql, function (err, result) {
+    var sql = `insert into matches (winner_id,loser_id,tour_id,round_id) values ?; `;
+    con.query(sql, [arr], function (err, result) {
         if (err) throw err;
         cb(null,result);
     })
@@ -336,5 +379,7 @@ module.exports = {
     getPlayers : getPlayers,
     getFinalResult:getFinalResult,
     getTotalPlayers:getTotalPlayers,
-    updateMatch:updateMatch
+    updateMatch:updateMatch,
+    getCurrentPlayers:getCurrentPlayers,
+    getRoundFixture:getRoundFixture
 }
