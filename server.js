@@ -117,11 +117,5 @@ app.get('/logout', function(req,res){
 });
 });
 
-
-
-// router.post('/register',login.register);
-// router.post('/login',login.login)
-// router.post('/tournament',login.subtournament)
-// router.post('/registerPlayers',login.registerPlayers)
 app.use('/api',api);
 app.listen(3000);

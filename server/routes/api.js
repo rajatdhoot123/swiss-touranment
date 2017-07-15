@@ -20,7 +20,6 @@ module.exports=function (){
     var tourId = req.body.tourId;
     player.registerPlayers(players,tourId,req.session.name,function(err,result){
       if (err) {
-        console.log("error ocurred",err);
         res.send({
           "code":400,
           "failed":"error ocurred"
@@ -45,7 +44,6 @@ module.exports=function (){
         })
       }else{
         req.session.name=result[0].user_id;
-        console.log(req.session.name + "=======================================");
         //res.cookie('user','email',{signed:true});
         res.redirect('/tournament')
       }
@@ -59,13 +57,12 @@ module.exports=function (){
 
     player.updateMatch(users,function(err,result){
       if (err) {
-        console.log("error ocurred",err);
         res.send({
           "code":400,
           "failed":"error ocurred"
         })
       }else{
-        console.log('The solution is: ', result);
+        console.log(result)
         res.json(result);
       }
     });
@@ -78,17 +75,13 @@ module.exports=function (){
 
   router.post('/registerUser',parse, function (req, res) {
     var users = req.body;
-    console.log(users)
     user.registerUser(users,function(err,result){
-      console.log("hi1")
       if (err) {
-        console.log("error ocurred",err);
         res.send({
           "code":400,
           "failed":"error ocurred"
         })
       }else{
-        console.log('The solution is: ', result);
         res.redirect('/login')
       }
     });
@@ -97,20 +90,51 @@ module.exports=function (){
 
   /*<<<<<<<<<<<<<<<<<<<CURRENT STATUS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
   router.get('/currentStatus/:tourId', function (req, res) {
-    console.log("Current Status Called");
     var tourId = req.params.tourId;
-    console.log(tourId);
     player.currentStatus(req.session.name,tourId,function(err,result){
       if (err) {
-        console.log("error ocurred",err);
         res.send({
           "code":400,
           "failed":"error ocurred"
         })
       }else{
-        console.log('The solution is:------------------------------------ ', result);
-
         res.send(JSON.stringify(result));
+      }
+    });
+  });
+
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+  router.post('/torunamentStatus/', function (req, res) {
+    var tourName = req.body.tname;
+    player.tstatus(req.session.name,tourName,function(err,result){
+      if (err) {
+        res.send({
+          "code":400,
+          "failed":"error ocurred"
+        })
+      }else{
+        res.send(JSON.stringify(result));
+      }
+    });
+  });
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+  router.get('/getRounds/:tourId', function (req, res) {
+    var tourId = req.params.tourId;
+    player.getRounds(tourId,function(err,result){
+      if (err) {
+        res.send({
+          "code":400,
+          "failed":"error ocurred"
+        })
+      }else{
+        res.send(result);
       }
     });
   });
@@ -124,20 +148,15 @@ module.exports=function (){
 
 
   router.get('/getRoundFixture/:tourId/:round', function (req, res) {
-    console.log("Current Status Called");
     var tourId = req.params.tourId;
     var round = req.params.round;
-    console.log(tourId +"++++++++++++++++++++++++++++++++++++"+round+"------------------------------")
-    console.log(tourId);
     player.getRoundFixture(round,tourId,function(err,result){
       if (err) {
-        console.log("error ocurred",err);
         res.send({
           "code":400,
           "failed":"error ocurred"
         })
       }else{
-        console.log(result)
         res.send(JSON.stringify(result));
       }
     });
@@ -155,14 +174,11 @@ module.exports=function (){
     var tourId = req.params.tourId;
     player.currentStatus(req.session.name,tourId,function(err,result){
       if (err) {
-        console.log("error ocurred",err);
         res.send({
           "code":400,
           "failed":"error ocurred"
         })
       }else{
-        console.log('The solution is:------------------------------------ ', result);
-
         res.send(JSON.stringify(result));
       }
     });
@@ -178,10 +194,8 @@ module.exports=function (){
 
 
   router.get('/getPlayers/:id',function(req,res){
-    console.log("req.params.id"+req.params.id+"req.params.id"+req.params.id)
     player.getPlayers(req.session.name,req.params.id,function(error,results){
       if (error) {
-        console.log("error ocurred",error);
         res.send({
           "code":400,
           "failed":"error ocurred"
@@ -198,7 +212,6 @@ module.exports=function (){
   router.get('/getTotalPlayers/:tourId',function(req,res){
     player.getTotalPlayers(req.params.tourId,req.session.name,function(error,results){
       if (error) {
-        console.log("error ocurred",error);
         res.send({
           "code":400,
           "failed":"error ocurred"
@@ -217,17 +230,11 @@ module.exports=function (){
     var tour_name = req.body.tour_name;
     player.userTournament([tour_name],[req.session.name],function(error,results){
       if (error) {
-        console.log("error ocurred",error);
         res.send({
           "code":400,
           "failed":"error ocurred"
         })
       }else{
-        console.log('Tournament Created-------------------------- ', results.insertId);
-        /*res.send({
-          "code":200,
-          "success":"user registered sucessfully"
-        });*/
         res.send(JSON.stringify({'result' : results.insertId}));
       }
     });
@@ -238,14 +245,11 @@ module.exports=function (){
   router.get('/sub_tour_count',function(req,res){
     player.displayTournament(req.session.name,function(error,results){
       if (error) {
-        console.log("error ocurred",error);
         res.send({
           "code":400,
           "failed":"error ocurred"
         })
       }else{
-        console.log('Player Counted ', results);
-
         res.send(JSON.stringify(results));
       }
     });
@@ -262,13 +266,11 @@ router.post('/getPlayerStandings',function(req,res){
   var fixture = false;
   player.getPlayerStandings(tourId,req.session.name,fixture,rounds,function(error,results){
     if (error) {
-      console.log("error ocurred",error);
       res.send({
         "code":400,
         "failed":"error ocurred"
       })
     }else{
-      console.log(results + "-----------------------------------------------------------------")
       res.render('result',{matchresult:results});
     }
   });
@@ -279,7 +281,6 @@ router.post('/getPlayerStandings',function(req,res){
 
 
 router.post('/getFixture',function(req,res){
-  console.log('Current Players');
   var rounds = req.body.round;
   var tourId = req.body.tourId;
   var fixture = true;
@@ -291,7 +292,6 @@ router.post('/getFixture',function(req,res){
         "failed":"error ocurred"
       })
     }else{
-      console.log(JSON.stringify(results)+"=========+++++++++++++++++_________________-------------------")
       res.send(JSON.stringify(results));
     }
   });
@@ -301,16 +301,13 @@ router.post('/getFixture',function(req,res){
 
 router.post('/getAllPlayers',function(req,res){
   var tourId = req.body.tourId;
-  console.log(tourId + "+================Tour Id"+req.session.name+"========================userId")
   player.getPlayers(req.session.name,tourId,function(error,results){
     if (error) {
-      console.log("error ocurred",error);
       res.send({
         "code":400,
         "failed":"error ocurred"
       })
     }else{
-      console.log('GET ALL PLAYERS++++++++++++++++++++++++++++++++++++++++++++++ ', results);
       res.render('getAllPlayer',{allPlayer : results});
     }
   });
@@ -322,7 +319,6 @@ router.post('/getFinalResult',function(req,res){
   var tourId = req.body.tourId;
   player.getFinalResult(tourId,function(error,results){
     if (error) {
-      console.log("error ocurred",error);
       res.send({
         "code":400,
         "failed":"error ocurred"
@@ -339,10 +335,8 @@ router.post('/getFinalResult',function(req,res){
 router.get('/deletePlayers/:id',function(req,res){
   //var pid = req.body.tourId;
   var pid = req.params.id;
-  console.log(pid);
   player.deletePlayers(pid,function(error,results){
     if (error) {
-      console.log("error ocurred",error);
       res.send({
         "code":400,
         "failed":"error ocurred"

@@ -31,14 +31,14 @@
     </div>
   </div>
   <div class="row"></div>
-  <div class="well well-md col-sm-4 col-md-4">
+  <div class="panel panel-success col-sm-4 col-md-4">
     <h4> {{tourName}} </h4>
     <p class="hidden tourId">{{tourId}}</p>
 
     <button type="button" id="addPlay" class="btn addPlay">Add Players</button>
     <input type="text" placeholder="Enter Player Name" name="pname">
 
-    <table class="table" id="getCurrentPlayers">
+    <table class="table table-striped" id="getCurrentPlayers">
       <thead class="text-center">
         <tr>
           <th>Player Name</th>
@@ -77,16 +77,16 @@
       </div>
     </div>
   </div>
-  <div class="well well-md col-sm-8 col-md-8">
+  <div class="panel panel-success col-sm-8 col-md-8 style="margin: 5px;">
     <h4 class="text-center">Points Table </h4>
     <div>
-      <table class="table table-bordered currentStatus" id="currentStatus">
+      <table class="table table-bordered table-striped currentStatus" id="currentStatus">
         <thead class="text-center">
           <tr class="text-center">
             <th>Player Name</th>
             <th>Tour Id</th>
-            <th>User Id</th>
-            <th>Points</th>
+            <th>Win</th>
+            <th>Loss</th>
           </tr>
         </thead>
         <tbody>
@@ -168,8 +168,8 @@
             <table class="table" id="currentFixture">
               <thead class="text-center">
                 <tr>
-                  <th>First Player</th>
-                  <th>Second Player</th>
+                  <th>Winner</th>
+                  <th>Loser</th>
                 </tr>
               </thead>
               <tbody>
@@ -179,7 +179,7 @@
           </div>
           <div class="modal-footer">
              <button type="button" class="btn" id="currentFixture" value="">Submit</button>
-            <button type="button" class="btn-sm btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn-sm btn-default" id="currentFixtureClose" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>

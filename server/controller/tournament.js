@@ -95,11 +95,9 @@ function userTournament(tour_name,user_id,cb){
             con.query(`insert into tournament (tour_name,user_id)  values (?,?)`,[tour_name,user_id], function (error, results) {
                 console.log("inside Second Query")
                 if (error) {
-                    console.log("error callback")
                     cb(error,0);
                 }
                 else{
-                    console.log("Result callback")
                     cb(0,results);
                 }
             })
@@ -156,7 +154,6 @@ var deleteMatches = function(cb){
 
 
 /*<<<<<<<<<<<<<<<<<<<FUNCTION TO DETERMINE CURRENT STATUS>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-
 
 var currentStatus = function(a,tourId,cb){
     console.log(tourId);
@@ -281,7 +278,6 @@ function getSwissPairings(standings, matches, rounds,tourId,fixture,cb) {
             }
         }
     }
-    console.log(pairing);
     cb(pairing);
     //console.log(pairing);
 }
@@ -320,7 +316,7 @@ var getFinalResult = function(tourId,cb) {
 
 var getRoundFixture = function(round,tourId,cb) {
     var con = create_connection();
-    var sql = `select winner_id,loser_id from matches where tour_id =${tourId} and round_id = ${round} `;
+    var sql = `select winner_id,loser_id from matches where (tour_id =${tourId} and round_id = ${round}) `;
     con.query(sql, function (err, result) {
         if (err) throw err;
         cb(null,result);
@@ -332,7 +328,6 @@ var getRoundFixture = function(round,tourId,cb) {
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 var getTotalPlayers = function(tourId,a,cb) {
-    console.log(tourId + "++++++++++++++++++++++++++++"+ a+ "++++++++++++++++++++++++++++")
     var con = create_connection();
     var sql = `select * from players where tour_id =${tourId} and user_id = ${a} `;
     con.query(sql, function (err, result) {
@@ -362,6 +357,32 @@ var updateMatch = function(users,cb) {
     })
 }
 
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+var tstatus = function(a,tname,cb) {
+    var con = create_connection();
+    var sql = `update tournament set status ="In Progress" where tour_name = '${tname}' and user_id = ${a};`
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        cb(null,result);
+    })
+}
+
+
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+var getRounds = function(tourId,cb) {
+    var con = create_connection();
+    var sql = `select DISTINCT round_id from matches where tour_id = ${tourId};`
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        cb(null,result);
+    })
+}
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
@@ -381,5 +402,7 @@ module.exports = {
     getTotalPlayers:getTotalPlayers,
     updateMatch:updateMatch,
     getCurrentPlayers:getCurrentPlayers,
-    getRoundFixture:getRoundFixture
+    getRoundFixture:getRoundFixture,
+    tstatus:tstatus,
+    getRounds:getRounds
 }
