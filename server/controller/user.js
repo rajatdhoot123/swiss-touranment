@@ -66,25 +66,9 @@ function registerUser(users,cb){
   });
 }
 
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-function subTournament(tour_name,id,cb){
-  connection.query(`insert into tournament (tour_name,id)  values (?,?)`,[tour_name,id], function (error, results) {
-      if (error) {
-        cb(error, 0)
-      }
-      else{
-        cb(0,results);
-      }
-  })
-}
-
-
 module.exports = {
   registerUser : registerUser,
-  loginUser : loginUser,
-  subTournament : subTournament
+  loginUser : loginUser
 }
 
 

@@ -73,7 +73,7 @@ $('#addPlay').on('click',function(event) {
     .then(function(result) {
         /*$('#playerId').find( "tbody" ).append( '<tr>'+'<td>' + formData.pname  + '</td>'+'</tr>' );*/
 
-        $('#currentStatus').find( "tbody" ).append( '<tr>'+'<td>' + formData.pname + '</td>'+'<td>' + formData.tourId  + '</td>'+'<td>' + 0  + '</td>'+'<td>' + 0  + '</td>'+'</tr>' );
+        $('#currentStatus').find( "tbody" ).append( '<tr>'+'<td>' + formData.pname + '</td>'+'<td>' + 0  + '</td>'+'<td>' + 0  + '</td>'+'</tr>' );
     });
     event.preventDefault();
 });
@@ -209,7 +209,6 @@ var matchRoundFunction = function(){
 }).then(function(){
     $.ajax({
         url:"/api/getRounds/"+$('.tourId').text(),success: function(data){
-            //alert(data)
 
             $.each(data,function(i,elem){
                 var temp1 = "" + (i+1);
@@ -220,16 +219,13 @@ var matchRoundFunction = function(){
                     $(temp2).append('Round Played')
                     $( temp2 ).css( "background-color", "red" );
                     $( `td.exeround${i+1}` ).prev().html('').text('Finished').css( {"z-index": "2","font-weight": "bold","color" : "red"} );
-
-                    //alert(!(temp2 === `#roundbtn${i+1}`))
                     if(($(`#roundbtn${i+1}`).val()) == rounds){
                         $('#startButton').attr({'disabled' : 'true'})
                         var winner = $('#currentStatus').find('tbody').children('tr:first-child').children('td:first-child').text()
-                        alert(winner)
-                        //$('#startButton').html('')
                         $('#startButton').html('').append('Winner is :'+ winner);
                          $('#startBody').text('Touranament Over, Winner is  ' + winner)
                          $('#startButton').addClass(" btn btn-block")
+                         $('#addPlay').attr({'disabled' : 'true'})
                     }
                 }
             })
