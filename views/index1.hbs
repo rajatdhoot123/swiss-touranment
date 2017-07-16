@@ -5,7 +5,7 @@
   <div class="row">
     <div class="col-sm-12 col-md-12">
       <!-- <button type="button" id="startMatch" class="btn pull-right disabled">Start Match</button> -->
-      <button type="button" style="margin : 10px;" class="btn btn-info btn-sm pull-right str_match" data-toggle="modal" data-target="#myModal1">Start Match</button>
+      <button type="button" style="margin : 10px;" class="btn btn-info btn-sm pull-right str_match" data-toggle="modal" id="startButton" data-target="#myModal1">Start Match</button>
 
       <div class="modal fade" id="myModal1" role="dialog">
 
@@ -30,8 +30,9 @@
       </div>
     </div>
   </div>
-  <div class="row"></div>
-  <div class="panel panel-success col-sm-4 col-md-4">
+  <div class="row">
+  <div class="col-sm-4 col-md-4">
+  <div class="panel panel-success">
     <h4> {{tourName}} </h4>
     <p class="hidden tourId">{{tourId}}</p>
 
@@ -77,6 +78,7 @@
       </div>
     </div>
   </div>
+</div>
   <div class="panel panel-success col-sm-8 col-md-8 style="margin: 5px;">
     <h4 class="text-center">Points Table </h4>
     <div>
@@ -84,7 +86,6 @@
         <thead class="text-center">
           <tr class="text-center">
             <th>Player Name</th>
-            <th>Tour Id</th>
             <th>Win</th>
             <th>Loss</th>
           </tr>
@@ -95,7 +96,7 @@
       </table>
     </div>
   </div>
-
+</div>
 
   <table class="table col-md-12 col-sm-12" id="rounds">
     <thead class="text-center">
@@ -143,7 +144,7 @@
           </div>
           <div class="modal-footer">
           <button type="button" class="btn" id="radioHandle" value="">Submit</button>
-            <button type="button" class="btn-sm btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn-sm btn-default" id="roundClose" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>

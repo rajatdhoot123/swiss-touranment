@@ -1,7 +1,8 @@
 var rounds = 0;
 
-
 $(document).ready(function() {
+
+
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Players From Other Tournament>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     var getPlayers = function(){
         $.get( "/api/getPlayers/"+$('.tourId').text(), function( data ) {
@@ -29,10 +30,10 @@ var getCurrentPlayers = function(){
 
 var currentStatus = function(){
     $.get( "/api/currentStatus/"+$('.tourId').text(), function( data ) {
-     var currentPlayers = JSON.parse(data)
-     $("#currentStatus td").remove();
-     for (var i = 0 ; i < currentPlayers.length ; i ++){
-        $('#currentStatus').find( "tbody" ).append( '<tr>'+'<td>' + currentPlayers[i].player_name + '</td>'+'<td>' + currentPlayers[i].tour_id  + '</td>'+'<td>' + currentPlayers[i].Win  + '</td>'+'<td>' + currentPlayers[i].loss  + '</td>'+'</tr>' );
+       var currentPlayers = JSON.parse(data)
+       $("#currentStatus td").remove();
+       for (var i = 0 ; i < currentPlayers.length ; i ++){
+        $('#currentStatus').find( "tbody" ).append( '<tr>'+'<td class="winner">' + currentPlayers[i].player_name + '</td>'+'<td>'  + currentPlayers[i].wins  + '</td>'+'<td>' + currentPlayers[i].losses  + '</td>'+'</tr>' );
     }
 })
 }
@@ -43,9 +44,9 @@ var currentStatus = function(){
 
 var getRoundFixture = function(){
     $.get( "/api/getRoundFixture"+$('.tourId').text(), function( data ) {
-     var currentPlayers = JSON.parse(data)
-     $("#currentStatus td").remove();
-     for (var i = 0 ; i < currentPlayers.length ; i ++){
+       var currentPlayers = JSON.parse(data)
+       $("#currentStatus td").remove();
+       for (var i = 0 ; i < currentPlayers.length ; i ++){
         $('#currentStatus').find( "tbody" ).append( '<tr>'+'<td>' + currentPlayers[i].player_name + '</td>'+'<td>' + currentPlayers[i].tour_id  + '</td>'+'<td>' + currentPlayers[i].Win  + '</td>'+'<td>' + currentPlayers[i].loss  + '</td>'+'</tr>' );
     }
 })
@@ -76,11 +77,6 @@ $('#addPlay').on('click',function(event) {
     });
     event.preventDefault();
 });
-
-
-
-
-
 
 
 
@@ -117,8 +113,21 @@ $(document).on("click", ".str_match", function(event){
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+/*$(document).on("click", "#roundClose", function(event){
+    alert($(this).attr('id'));
+})
+*/
+
+
+
+
+
+
+
+
 
 $(document).on("click", "#radioHandle", function(event){
+
     matchRoundFunction();
     var winner = [];
     var loser = [];
@@ -163,12 +172,12 @@ $(document).on("click", ".getStanding", function(event){
 
 var getRoundFixture = function(){
     $.get( "/api/getRoundFixture/"+$('.tourId').text()+'/'+round, function( data ) {
-       var result = JSON.parse(data)
-       $("#currentFixtureBody td").remove();
-        for (var i = 0; i < result.length;i++){
-           $('#currentFixtureBody').find( "tbody" ).append('<tr>'+'<td>'+ result[i].winner_id +'</td>' + '<td>' + result[i].loser_id  + '</td>' + '</tr>');
-        }
-    })
+     var result = JSON.parse(data)
+     $("#currentFixtureBody td").remove();
+     for (var i = 0; i < result.length;i++){
+         $('#currentFixtureBody').find( "tbody" ).append('<tr>'+'<td>'+ result[i].winner_id +'</td>' + '<td>' + result[i].loser_id  + '</td>' + '</tr>');
+     }
+ })
 }
 
 
@@ -183,20 +192,20 @@ $('.str_match').on('click',function(event) {
 
 var matchRoundFunction = function(){
 
- $.get( "/api/getTotalPlayers/"+$('.tourId').text(), function( data ) {
+   $.get( "/api/getTotalPlayers/"+$('.tourId').text(), function( data ) {
 
-  var tplayers = JSON.parse(data)
-  rounds = Math.log2(tplayers.length)
-  if(Number.isInteger(Math.log2(tplayers.length))){
-    $('#startBody').text('You Can Start Match Now')
-    $("#rounds td").remove();
-    for (var i = 1;i <= rounds ; i++){
-        $('#rounds').find( "tbody" ).append('<tr>'+'<td>' + [i]  + '</td>'+'<td class="status">' + 'status'  + '</td>' +`<td class="exeround${i}">` + `<button type="button" class="btn btn-info btn-sm str_match" data-toggle="modal" data-target="#myModal2" id="roundbtn${i}" value="${i}">Execute Round ${i}</button>`+ '</td>'+'<td>' + `<button type="button" class="btn btn-info btn-sm getStanding" data-toggle="modal" data-target="#myModal3" id="currentFixture" value="${i}">Standing</button>`+ '</td>'+ '</tr>' );
+      var tplayers = JSON.parse(data)
+      rounds = Math.log2(tplayers.length)
+      if(Number.isInteger(Math.log2(tplayers.length))){
+        $('#startBody').text('You Can Start Match Now')
+        $("#rounds td").remove();
+        for (var i = 1;i <= rounds ; i++){
+            $('#rounds').find( "tbody" ).append('<tr>'+'<td>' + [i]  + '</td>'+'<td class="status">' + 'status'  + '</td>' +`<td class="exeround${i}">` + `<button type="button" class="btn btn-info btn-sm str_match" data-toggle="modal" data-target="#myModal2" id="roundbtn${i}" value="${i}">Execute Round ${i}</button>`+ '</td>'+'<td>' + `<button type="button" class="btn btn-info btn-sm getStanding" data-toggle="modal" data-target="#myModal3" id="currentFixture" value="${i}">Standing</button>`+ '</td>'+ '</tr>' );
+        }
     }
-}
-else{
-    $('#startBody').text('You Can Not Start Match Now Add Player 2 Power Of N to Start Match')
-}
+    else{
+        $('#startBody').text('You Can Not Start Match Now Add Player 2 Power Of N to Start Match')
+    }
 }).then(function(){
     $.ajax({
         url:"/api/getRounds/"+$('.tourId').text(),success: function(data){
@@ -210,10 +219,17 @@ else{
                     $(temp2).html('')
                     $(temp2).append('Round Played')
                     $( temp2 ).css( "background-color", "red" );
-                    $( `td.exeround${i+1}` ).prev().css( "background-color", "blue" );
-                    if(rounds === i){
-                        alert(rounds)
-                        $(".str_match").html().append("Match Over")
+                    $( `td.exeround${i+1}` ).prev().html('').text('Finished').css( {"z-index": "2","font-weight": "bold","color" : "red"} );
+
+                    //alert(!(temp2 === `#roundbtn${i+1}`))
+                    if(($(`#roundbtn${i+1}`).val()) == rounds){
+                        $('#startButton').attr({'disabled' : 'true'})
+                        var winner = $('#currentStatus').find('tbody').children('tr:first-child').children('td:first-child').text()
+                        alert(winner)
+                        //$('#startButton').html('')
+                        $('#startButton').html('').append('Winner is :'+ winner);
+                         $('#startBody').text('Touranament Over, Winner is  ' + winner)
+                         $('#startButton').addClass(" btn btn-block")
                     }
                 }
             })
@@ -221,6 +237,29 @@ else{
     })
 })
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

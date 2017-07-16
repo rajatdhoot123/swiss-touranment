@@ -158,11 +158,14 @@ var deleteMatches = function(cb){
 var currentStatus = function(a,tourId,cb){
     console.log(tourId);
     var con = create_connection();
-var sql = `SELECT players.player_name,players.user_id,players.tour_id,
-COUNT(matches.winner_id) AS Win,
-COUNT(matches.loser_id) AS loss FROM
- players LEFT JOIN matches ON matches.winner_id = players.player_name
- GROUP BY players.player_name having (players.user_id = ${a} and players.tour_id= ${tourId}) order by Win DESC`;
+var sql = `select p.id,p.user_id,p.tour_id,
+            p.player_name, ifnull(ws.wins, 0) as wins, ifnull(ls.losses,0) as losses,
+            (ifnull(ws.wins,0) + ifnull(ls.losses,0)) as matches
+            from players p left outer join ((select winner_id, count(*) as wins
+            from matches group by winner_id) as ws) on (p.player_name = ws.winner_id)
+            left outer join ((select loser_id, count(*) as losses
+            from matches group by loser_id) as ls)
+            on (p.player_name = ls.loser_id) having (p.user_id = ${a} and p.tour_id = ${tourId}) order by wins desc`;
 
 
 /*    var sql = (`SELECT players.player_name,
