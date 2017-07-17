@@ -73,7 +73,6 @@ $(document).on("click", "#addExisting", function(event){
         })
 
     .then(function(result) {
-
         $('#currentStatus').find( "tbody" ).append( '<tr>'+'<td>' + formData.pname + '</td>'+'<td>' + 0  + '</td>'+'<td>' + 0  + '</td>'+'</tr>' );
     });
     event.preventDefault();
@@ -99,9 +98,14 @@ $('#addPlay').on('click',function(event) {
         })
 
     .then(function(result) {
+        if(result === 0){
+            alert("Player Already Exist")
+        }
+        else{
         $('#getCurrentPlayers').find( "tbody" ).append( '<tr>'+'<td>' + formData.pname  + '</td>'+'</tr>' );
 
         $('#currentStatus').find( "tbody" ).append( '<tr>'+'<td>' + formData.pname + '</td>'+'<td>' + 0  + '</td>'+'<td>' + 0  + '</td>'+'</tr>' );
+    }
     });
     event.preventDefault();
 });
@@ -218,12 +222,12 @@ var matchRoundFunction = function(){
     $('#startBody').text('You Can Start Match Now')
     $("#rounds td").remove();
     for (var i = 1;i <= rounds ; i++){
-        // if(i === 1){
+         if(i === 1){
         $('#rounds').find( "tbody" ).append('<tr>'+'<td>' + [i]  + '</td>'+'<td class="status">' + 'status'  + '</td>' +`<td class="exeround${i}">` + `<button type="button" class="btn btn-info btn-sm str_match" data-toggle="modal" data-target="#myModal2" id="roundbtn${i}" value="${i}">Execute Round ${i}</button>`+ '</td>'+'<td>' + `<button type="button" class="btn btn-info btn-sm getStanding" data-toggle="modal" data-target="#myModal3" id="currentFixture" value="${i}">Standing</button>`+ '</td>'+ '</tr>' );
-    // }
-    // else{
-    //     $('#rounds').find( "tbody" ).append('<tr>'+'<td>' + [i]  + '</td>'+'<td class="status">' + 'status'  + '</td>' +`<td class="exeround${i}">` + `<button type="button" class="btn btn-info btn-sm str_match" data-toggle="modal" data-target="#myModal2" id="roundbtn${i}" disabled = 'true' value="${i}">Execute Round ${i}</button>`+ '</td>'+'<td>' + `<button type="button" class="btn btn-info btn-sm getStanding" data-toggle="modal" data-target="#myModal3" id="currentFixture" value="${i}">Standing</button>`+ '</td>'+ '</tr>' );
-    // }
+    }
+    else{
+        $('#rounds').find( "tbody" ).append('<tr>'+'<td>' + [i]  + '</td>'+'<td class="status">' + 'status'  + '</td>' +`<td class="exeround${i}">` + `<button type="button" class="btn btn-info btn-sm str_match" data-toggle="modal" data-target="#myModal2" id="roundbtn${i}" disabled = 'true' value="${i}">Execute Round ${i}</button>`+ '</td>'+'<td>' + `<button type="button" class="btn btn-info btn-sm getStanding" data-toggle="modal" data-target="#myModal3" id="currentFixture" value="${i}">Standing</button>`+ '</td>'+ '</tr>' );
+    }
 }
 }
 else{
@@ -238,6 +242,7 @@ else{
                 var roundName = '#roundbtn'.concat(rnd1)
                 if($(roundName).val() == elem.round_id){
                     $(roundName).attr({'disabled' : 'true'})
+                    $(`#roundbtn${i+2}`).prop("disabled" , false)
                     $(roundName).html('')
                     $(roundName).append('Round Played')
                     $( roundName ).css( "background-color", "red" );
@@ -255,6 +260,7 @@ else{
         }
     })
 })
+
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
 })
