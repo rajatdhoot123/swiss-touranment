@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var parse = bodyParser.urlencoded({ extended: true });
 var router = express.Router();
 var session = require('express-session');
-//var a = 0;
+
 module.exports=function (){
 
   router.get('/',function(req,res){
@@ -323,7 +323,6 @@ router.post('/getFinalResult',function(req,res){
 //>>>>>>>>>>>>>>>>>>>>>DELETE PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 router.get('/deletePlayers/:id',function(req,res){
-  //var pid = req.body.tourId;
   var pid = req.params.id;
   player.deletePlayers(pid,function(error,results){
     if (error) {

@@ -59,7 +59,6 @@ var getRoundFixture = function(){
 
 
 $(document).on("click", "#addExisting", function(event){
-    alert(($('.tourId').text()))
     var formData = {
         'pname'         : $(this).val(),
         'tourId'        : $('.tourId').text()
@@ -74,7 +73,6 @@ $(document).on("click", "#addExisting", function(event){
         })
 
     .then(function(result) {
-        /*$('#playerId').find( "tbody" ).append( '<tr>'+'<td>' + formData.pname  + '</td>'+'</tr>' );*/
 
         $('#currentStatus').find( "tbody" ).append( '<tr>'+'<td>' + formData.pname + '</td>'+'<td>' + 0  + '</td>'+'<td>' + 0  + '</td>'+'</tr>' );
     });
@@ -119,6 +117,8 @@ getCurrentPlayers();
 
 $(document).on("click", ".str_match", function(event){
     //$(this).attr("disabled", true);
+    // $(this).parent().next().children('tr:first-child').text('Completed')
+    /*$('#rounds').find('tbody').children('tr:nth-child(3)').text('Completed')*/
     var formData = {
         'round'         : $(this).attr("value"),
         'tourId'        : $('.tourId').text()
@@ -210,40 +210,45 @@ $('.str_match').on('click',function(event) {
 
 var matchRoundFunction = function(){
 
-   $.get( "/api/getTotalPlayers/"+$('.tourId').text(), function( data ) {
+ $.get( "/api/getTotalPlayers/"+$('.tourId').text(), function( data ) {
 
-      var tplayers = JSON.parse(data)
-      rounds = Math.log2(tplayers.length)
-      if(Number.isInteger(Math.log2(tplayers.length))){
-        $('#startBody').text('You Can Start Match Now')
-        $("#rounds td").remove();
-        for (var i = 1;i <= rounds ; i++){
-            $('#rounds').find( "tbody" ).append('<tr>'+'<td>' + [i]  + '</td>'+'<td class="status">' + 'status'  + '</td>' +`<td class="exeround${i}">` + `<button type="button" class="btn btn-info btn-sm str_match" data-toggle="modal" data-target="#myModal2" id="roundbtn${i}" value="${i}">Execute Round ${i}</button>`+ '</td>'+'<td>' + `<button type="button" class="btn btn-info btn-sm getStanding" data-toggle="modal" data-target="#myModal3" id="currentFixture" value="${i}">Standing</button>`+ '</td>'+ '</tr>' );
-        }
-    }
-    else{
-        $('#startBody').text('You Can Not Start Match Now Add Player 2 Power Of N to Start Match')
-    }
+  var tplayers = JSON.parse(data)
+  rounds = Math.log2(tplayers.length)
+  if(Number.isInteger(Math.log2(tplayers.length))){
+    $('#startBody').text('You Can Start Match Now')
+    $("#rounds td").remove();
+    for (var i = 1;i <= rounds ; i++){
+        // if(i === 1){
+        $('#rounds').find( "tbody" ).append('<tr>'+'<td>' + [i]  + '</td>'+'<td class="status">' + 'status'  + '</td>' +`<td class="exeround${i}">` + `<button type="button" class="btn btn-info btn-sm str_match" data-toggle="modal" data-target="#myModal2" id="roundbtn${i}" value="${i}">Execute Round ${i}</button>`+ '</td>'+'<td>' + `<button type="button" class="btn btn-info btn-sm getStanding" data-toggle="modal" data-target="#myModal3" id="currentFixture" value="${i}">Standing</button>`+ '</td>'+ '</tr>' );
+    // }
+    // else{
+    //     $('#rounds').find( "tbody" ).append('<tr>'+'<td>' + [i]  + '</td>'+'<td class="status">' + 'status'  + '</td>' +`<td class="exeround${i}">` + `<button type="button" class="btn btn-info btn-sm str_match" data-toggle="modal" data-target="#myModal2" id="roundbtn${i}" disabled = 'true' value="${i}">Execute Round ${i}</button>`+ '</td>'+'<td>' + `<button type="button" class="btn btn-info btn-sm getStanding" data-toggle="modal" data-target="#myModal3" id="currentFixture" value="${i}">Standing</button>`+ '</td>'+ '</tr>' );
+    // }
+}
+}
+else{
+    $('#startBody').text('You Can Not Start Match Now Add Player 2 Power Of N to Start Match')
+}
 }).then(function(){
     $.ajax({
         url:"/api/getRounds/"+$('.tourId').text(),success: function(data){
 
             $.each(data,function(i,elem){
-                var temp1 = "" + (i+1);
-                var temp2 = '#roundbtn'.concat(temp1)
-                if($(temp2).val() == elem.round_id){
-                    $(temp2).attr({'disabled' : 'true'})
-                    $(temp2).html('')
-                    $(temp2).append('Round Played')
-                    $( temp2 ).css( "background-color", "red" );
+                var rnd1 = "" + (i+1);
+                var roundName = '#roundbtn'.concat(rnd1)
+                if($(roundName).val() == elem.round_id){
+                    $(roundName).attr({'disabled' : 'true'})
+                    $(roundName).html('')
+                    $(roundName).append('Round Played')
+                    $( roundName ).css( "background-color", "red" );
                     $( `td.exeround${i+1}` ).prev().html('').text('Finished').css( {"z-index": "2","font-weight": "bold","color" : "red"} );
                     if(($(`#roundbtn${i+1}`).val()) == rounds){
                         $('#startButton').attr({'disabled' : 'true'})
                         var winner = $('#currentStatus').find('tbody').children('tr:first-child').children('td:first-child').text()
                         $('#startButton').html('').append('Winner is :'+ winner);
-                         $('#startBody').text('Touranament Over, Winner is  ' + winner)
-                         $('#startButton').addClass(" btn btn-block")
-                         $('#addPlay').attr({'disabled' : 'true'})
+                        $('#startBody').text('Touranament Over, Winner is  ' + winner)
+                        $('#startButton').addClass(" btn btn-block")
+                        $('#addPlay').attr({'disabled' : 'true'})
                     }
                 }
             })

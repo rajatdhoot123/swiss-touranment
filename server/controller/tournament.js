@@ -19,6 +19,7 @@ function create_connection() {
 /*<<<<<<<<<<<<<<<<<<<<<<<<<FUNCTION FOR REGISTER PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
 var registerPlayers = function registerPlayers(players,tourId,a, cb) {
+    console.log(tourId,"4444444444444444444444444444444444")
     var con = create_connection();
     sql1 = `select count(*) as count,player_name from players
             where tour_id = ${tourId} and
