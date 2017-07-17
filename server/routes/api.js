@@ -17,6 +17,7 @@ module.exports=function (){
   /*<<<<<<<<<<<<<<<<<<<Register Players>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
   router.post('/registerPlayers', parse ,function(req,res){
     var players = req.body.pname;
+    if(!(players === "" )){
     var tourId = req.body.tourId;
     player.registerPlayers(players,tourId,req.session.name,function(err,result){
       if (err) {
@@ -28,6 +29,10 @@ module.exports=function (){
         res.json(result);
       }
     });
+  }
+  else{
+    res.send("You Cannont Add Empty Player");
+  }
   });
 
   /*<<<<<<<<<<<<<<<<<<<LOGIN USER>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
@@ -62,7 +67,6 @@ module.exports=function (){
           "failed":"error ocurred"
         })
       }else{
-        console.log(result)
         res.json(result);
       }
     });
@@ -184,14 +188,7 @@ module.exports=function (){
     });
   });
 
-
-
-
-
-
   /*<<<<<<<<<<<<<<<<<<<CURRENT STATUS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-
-
 
   router.get('/getPlayers/:id',function(req,res){
     player.getPlayers(req.session.name,req.params.id,function(error,results){
@@ -208,7 +205,6 @@ module.exports=function (){
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
   router.get('/getTotalPlayers/:tourId',function(req,res){
     player.getTotalPlayers(req.params.tourId,req.session.name,function(error,results){
       if (error) {
@@ -222,10 +218,8 @@ module.exports=function (){
     });
   });
 
-
-
-
   /*<<<<<<<<<<<<<<<<<<<User Tournament>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+
   router.post('/usertournament',parse,function(req,res){
     var tour_name = req.body.tour_name;
     player.userTournament([tour_name],[req.session.name],function(error,results){
@@ -242,6 +236,7 @@ module.exports=function (){
 
 
   /*<<<<<<<<<<<<<<<<<<<Sub Tournament Count>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+
   router.get('/sub_tour_count',function(req,res){
     player.displayTournament(req.session.name,function(error,results){
       if (error) {
@@ -257,8 +252,6 @@ module.exports=function (){
 
 
 //<<<<<<<<<<<<<<<<<<<<<<<GET PLAYERS STANDING>>>>>>>>>>>>>>>>>>>>>>
-
-
 
 router.post('/getPlayerStandings',function(req,res){
   var tourId = req.body.tourId;
@@ -277,8 +270,6 @@ router.post('/getPlayerStandings',function(req,res){
 });
 
 //++++++++++++++++++++++++++++++GET SWISS PAIRING+++++++++++++++++++++++++++++++++++++++++++
-
-
 
 router.post('/getFixture',function(req,res){
   var rounds = req.body.round;
@@ -331,7 +322,6 @@ router.post('/getFinalResult',function(req,res){
 
 //>>>>>>>>>>>>>>>>>>>>>DELETE PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-
 router.get('/deletePlayers/:id',function(req,res){
   //var pid = req.body.tourId;
   var pid = req.params.id;
@@ -346,7 +336,6 @@ router.get('/deletePlayers/:id',function(req,res){
     }
   });
 });
-
 
 /*<<<<<<<<<<<<<<<<<<<Sub Tournament COunt>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 return router;

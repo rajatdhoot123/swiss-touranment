@@ -1,21 +1,21 @@
-var rounds = 0;
-
 $(document).ready(function() {
 
 
-    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Players From Other Tournament>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Players From Other Tournament>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
     var getPlayers = function(){
         $.get( "/api/getPlayers/"+$('.tourId').text(), function( data ) {
           var totalPlayers = JSON.parse(data)
           $("#playerId td").remove();
           for (var i = 0 ; i < totalPlayers.length ; i ++){
-            $('#playerId').find( "tbody" ).append( '<tr>'+'<td>' + `<a href="/inside_game/${totalPlayers[i].tour_id}/${totalPlayers[i].player_name}">${totalPlayers[i].player_name}</a>` + '</td>'+'</tr>' );
+            $('#playerId').find( "tbody" ).append( '<tr>'+'<td>' + `<input type="button" class="btn btn-info" id="addExisting" name="${totalPlayers[i].tour_id}" value="${totalPlayers[i].player_name}"></button>` + '</td>'+'</tr>' );
         }
     })
     }
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 var getCurrentPlayers = function(){
     $.get( "/api/getCurrentPlayers/"+$('.tourId').text(), function( data ) {
       var currentPlayers = JSON.parse(data)
@@ -54,11 +54,14 @@ var getRoundFixture = function(){
 
 
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-$('#addPlay').on('click',function(event) {
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+$(document).on("click", "#addExisting", function(event){
+    alert(($('.tourId').text()))
     var formData = {
-        'pname'         : $('input[name=pname]').val(),
+        'pname'         : $(this).val(),
         'tourId'        : $('.tourId').text()
     };
 
@@ -80,9 +83,37 @@ $('#addPlay').on('click',function(event) {
 
 
 
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+$('#addPlay').on('click',function(event) {
+    var formData = {
+        'pname'         : $('input[name=pname]').val(),
+        'tourId'        : $('.tourId').text()
+    };
+
+    $.ajax({
+            type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+            url         : '/api/registerPlayers', // the url where we want to POST
+            data        : formData, // our data object
+            dataType    : 'json', // what type of data do we expect back from the server
+            encode      : true
+        })
+
+    .then(function(result) {
+        $('#getCurrentPlayers').find( "tbody" ).append( '<tr>'+'<td>' + formData.pname  + '</td>'+'</tr>' );
+
+        $('#currentStatus').find( "tbody" ).append( '<tr>'+'<td>' + formData.pname + '</td>'+'<td>' + 0  + '</td>'+'<td>' + 0  + '</td>'+'</tr>' );
+    });
+    event.preventDefault();
+});
+
+
+
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 currentStatus();
 getPlayers();
+var rounds = 0;
 getCurrentPlayers();
 
 
@@ -112,19 +143,6 @@ $(document).on("click", ".str_match", function(event){
 
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-/*$(document).on("click", "#roundClose", function(event){
-    alert($(this).attr('id'));
-})
-*/
-
-
-
-
-
-
-
-
 
 $(document).on("click", "#radioHandle", function(event){
 
@@ -233,35 +251,5 @@ var matchRoundFunction = function(){
     })
 })
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
 })

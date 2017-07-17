@@ -1,12 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Sign Up</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
 
-<div class="register">
-    <h1>Sign Up</h1>
-    <form method="post" action="api/registerUser">
-    <input type="text" name="first_name" placeholder="firstname" required="required" />
-    <input type="text" name="last_name" placeholder="lastname" required="required" />
-    <input type="text" name="email" placeholder="email" required="required" />
-    <input type="password" name="password" placeholder="Password" required="required" />
-        <a href="tournament.html"><button type="submit" class="btn btn-primary btn-block btn-large">Let me in.</button></a>
-    </form>
+    <div class="container">
+      <h2>Enter User Detail</h2>
+      <form action="/api/registerUser" method="post">
+        <div class="form-group">
+          <label for="first_name">First Name:</label>
+          <input type="text" class="form-control" id="fname" placeholder="Enter First Name" name="first_name">
+      </div>
+      <div class="form-group">
+          <label for="">Last Name:</label>
+          <input type="text" class="form-control" id="lname" placeholder="Enter Last Name" name="last_name">
+      </div>
+      <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+      </div>
+      <div class="form-group">
+          <label for="pwd">Password:</label>
+          <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password">
+      </div>
+      <a href="tournament.html"><button type="submit" class="btn btn-primary btn-block btn-large">Let me in.</button></a>
+  </form>
 </div>
 
+</body>
+</html>
