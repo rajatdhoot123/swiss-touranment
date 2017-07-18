@@ -1,10 +1,9 @@
-
-
 <link rel="stylesheet" href="/bootstrap.css" />
 <div class="container">
   <div class="row">
     <div class="col-sm-12 col-md-12">
-      <!-- <button type="button" id="startMatch" class="btn pull-right disabled">Start Match</button> -->
+        <a href="/tournament/1" class="btn btn-info" id="status" role="button">Back</a>
+      <h4 class="text-right hidden" id="getValue" value="{{status}}"></h4>
       <button type="button" style="margin : 10px;" class="btn btn-info btn-sm pull-right str_match" data-toggle="modal" id="startButton" data-target="#myModal1">Start Match</button>
       <div class="modal fade" id="myModal1" role="dialog">
         <div class="modal-dialog modal-sm">
@@ -25,12 +24,16 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-4 col-md-4">
+    <div class="col-sm-6 col-md-6">
       <div class="panel panel-success">
-        <h4> {{tourName}} </h4>
+        <h4> {{tourName}}</h4>
         <p class="hidden tourId">{{tourId}}</p>
-        <button type="button" id="addPlay" class="btn addPlay">Add Players</button>
-        <input type="text" placeholder="Enter Player Name" name="pname">
+        <div class="col-sm-8">
+        <input type="text" class="form-control addPlayInput" placeholder="Enter Player Name" name="pname">
+        </div>
+        <div class="col-sm-3">
+        <button type="button" id="addPlay" class="btn btn-primary btn-sm addPlay">Add Players</button>
+        </div>
         <table class="table table-striped" id="getCurrentPlayers">
           <thead class="text-center">
             <tr>
@@ -40,7 +43,7 @@
           <tbody>
           </tbody>
         </table>
-        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Existing Players</button>
+        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" id="existingPlayer" data-target="#myModal">Existing Players</button>
         <div class="modal fade" id="myModal" role="dialog">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -67,7 +70,7 @@
         </div>
       </div>
     </div>
-    <div class="panel panel-success col-sm-8 col-md-8 style="margin: 5px;">
+    <div class="panel panel-success col-sm-6 col-md-6 style="margin: 5px;">
       <h4 class="text-center">Points Table </h4>
       <div>
         <table class="table table-bordered table-striped currentStatus" id="currentStatus">
@@ -84,6 +87,7 @@
       </div>
     </div>
   </div>
+  <div class="tclass">
   <table class="table col-md-12 col-sm-12" id="rounds">
     <thead class="text-center">
       <tr>
@@ -96,6 +100,7 @@
     <tbody>
     </tbody>
   </table>
+  </div>
   <div class="col-sm-12 col-md-12">
 
     <div class="modal fade" id="myModal2" role="dialog">
@@ -126,8 +131,7 @@
             </table>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn" id="radioHandle" value="">Submit</button>
-            <button type="button" class="btn-sm btn-default" id="roundClose" data-dismiss="modal">Close</button>
+            <button type="button" class="btn" id="radioHandle" data-dismiss="modal" value="">Submit</button>
           </div>
         </div>
       </div>

@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname,'/public')));
 var FileStore = require('session-file-store')(session);
 
 
-app.engine('hbs',hbs({extname:'hbs',defaultLayout : 'layouts',layoutsDir : __dirname + '/views/layouts/'}))
+app.engine('hbs',hbs({extname:'hbs',defaultLayout : 'layouts',layoutsDir : path.resolve( __dirname + '/views/layouts/')}))
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine','hbs');
 
@@ -30,22 +30,24 @@ app.use(session({
     saveUninitialized: true,
     cookie : 'maxAge: 1000*60*2'}));
 
-app.use(function(req,res,next){
+/*app.use(function(req,res,next){
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next()
 });
-
+*/
 
 
 app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname + '/views/index.html'));
+    res.render('login',{layout : false})
 });
 
 
 
-app.get('/tournament', checkSignIn, function(req, res) {
-    res.status(200).sendFile(path.join(__dirname + '/views/tournament.html'));
+app.get('/tournament/:uid', checkSignIn, function(req, res) {
+    res.render('tournament.hbs',{title: 'Tournament ',layout : "newLayout",
+        userId : req.params.uid
+    });
 });
 
 
@@ -67,16 +69,11 @@ app.route('/login')
 })
 
 
-/*app.get('/inside_game', checkSignIn, function(req, res) {
-        res.status(200).sendFile(path.join(__dirname + '/views/inside_game.html'));
-});
-*/
-
-
-app.get('/inside_game/:id/:name', checkSignIn, function(req, res) {
+app.get('/inside_game/:id/:name/:status', checkSignIn, function(req, res) {
     res.render('index1',{title: 'Tournament ',
         tourId : req.params.id,
         tourName : req.params.name,
+        status : req.params.status,
         condition:false});
 });
 

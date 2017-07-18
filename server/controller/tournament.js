@@ -60,6 +60,47 @@ var displayTournament = function (a,cb){
 }
 
 
+
+
+
+//=================================================================================================
+/*select max(matches.round_id) as rounds,matches.winner_id,count(matches.winner_id) as Points,
+            tournament.status from matches,
+            tournament where matches.tour_id = 6 and tournament.status= 'Finished'
+            group by winner_id order by Points desc limit 1*/
+
+
+
+
+
+
+
+
+var getTournamentStatus = function (a,tourId,cb){
+    var con=create_connection();
+    var sql=`select status from tournament where user_id = ${a} and tour_id = ${tourId}`;
+    con.query(sql,function(err,result){
+        if(err) {
+            cb(err,0);
+        }
+        else{
+            var sql1 = `select max(matches.round_id) as rounds,tournament.status,matches.winner_id,count(matches.winner_id) as Points,
+            tournament.status from matches,
+            tournament where tournament.tour_id = ${tourId}
+            group by winner_id order by Points desc limit 1`;
+            con.query(sql1,function(err,result){
+                con.end();
+                if(err) {
+                    cb(err,0);
+                }
+                else{
+                    cb(0,result)
+                }
+            })
+        }
+     })
+}
+
 //++++++++++++++++++++++++++++++User Tounament+++++++++++++++++++++++++++++++++++++++++++++++++
 
 function userTournament(tour_name,user_id,cb){
@@ -118,7 +159,11 @@ var sql = `select p.id,p.user_id,p.tour_id,
 
 var getPlayers = function (a,tourId,cb) {
     var con = create_connection();
-    var sql = (`select * from players where user_id = ${a} and tour_id != ${tourId}`);
+    var sql = (`select distinct player_name from players where user_id = ${a} and tour_id <> ${tourId}
+                and player_name not in
+                (select player_name from players where user_id = ${a} and tour_id = ${tourId}
+                )
+            `);
     con.query(sql, function (err, result) {
         con.end();
         if (err) {
@@ -225,10 +270,16 @@ var getRoundFixture = function(round,tourId,cb) {
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 var getTotalPlayers = function(tourId,a,cb) {
     var con = create_connection();
-    var sql = `select * from players where tour_id =${tourId} and user_id = ${a} `;
-    con.query(sql, function (err, result) {
+    var sql1 = `update tournament set status = 'In Progress' where tour_id = ${tourId}`
+    con.query(sql1, function (err, result) {
         if (err) throw err;
-        cb(null,result);
+        else{
+            var sql = `select * from players where tour_id =${tourId} and user_id = ${a} `;
+            con.query(sql, function (err, result) {
+                if (err) throw err;
+                cb(null,result);
+            })
+        }
     })
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -278,6 +329,22 @@ var getRounds = function(tourId,cb) {
     })
 }
 
+
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+var updateTour = function(tourId,gameOver,cb) {
+    var con = create_connection();
+    var sql = `update tournament set status = 'Finished' where tour_id = ${tourId}`
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        cb(null,result);
+    })
+}
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
@@ -294,5 +361,7 @@ module.exports = {
     getCurrentPlayers:getCurrentPlayers,
     getRoundFixture:getRoundFixture,
     tstatus:tstatus,
-    getRounds:getRounds
+    getRounds:getRounds,
+    updateTour:updateTour,
+    getTournamentStatus:getTournamentStatus
 }

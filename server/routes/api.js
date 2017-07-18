@@ -10,7 +10,7 @@ module.exports=function (){
 
   router.get('/',function(req,res){
     app.use(express.static(path.join(__dirname, '/index.html')));
-    res.json({ message: 'welcome to Swiss Tournament' });
+    res.send({ message: 'welcome to Swiss Tournament' });
   });
 
 
@@ -42,15 +42,11 @@ module.exports=function (){
     var password = req.body.password;
     user.loginUser(email,password,function(err,result){
       if (err) {
-        res.send({
-          "invalid":"Who You Are You Are Not Authoonticate user",
-          "code":400,
-          "failed":err
-        })
+        res.render('login',{layout : false, userName : err})
       }else{
         req.session.name=result[0].user_id;
         //res.cookie('user','email',{signed:true});
-        res.redirect('/tournament')
+        res.redirect('/tournament/'+req.session.name)
       }
     });
   });
@@ -86,7 +82,7 @@ module.exports=function (){
           "failed":"error ocurred"
         })
       }else{
-        res.redirect('/login')
+        res.render('login')
       }
     });
   });
@@ -96,6 +92,25 @@ module.exports=function (){
   router.get('/currentStatus/:tourId', function (req, res) {
     var tourId = req.params.tourId;
     player.currentStatus(req.session.name,tourId,function(err,result){
+      if (err) {
+        res.send({
+          "code":400,
+          "failed":"error ocurred"
+        })
+      }else{
+        res.send(JSON.stringify(result));
+      }
+    });
+  });
+
+
+//==========================================================================================================
+
+
+
+  router.get('/getTournamentStatus/:tourId', function (req, res) {
+    var tourId = req.params.tourId;
+    player.getTournamentStatus(req.session.name,tourId,function(err,result){
       if (err) {
         res.send({
           "code":400,
@@ -221,7 +236,10 @@ module.exports=function (){
   /*<<<<<<<<<<<<<<<<<<<User Tournament>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
   router.post('/usertournament',parse,function(req,res){
+
+    //if(!( === "" )){}
     var tour_name = req.body.tour_name;
+    if(!(tour_name === "" )){
     player.userTournament([tour_name],[req.session.name],function(error,results){
       if (error) {
         res.send({
@@ -232,6 +250,10 @@ module.exports=function (){
         res.send(JSON.stringify({'result' : results.insertId}));
       }
     });
+  }
+  else{
+    res.send("You Cannot Add Empty Tournament");
+  }
   });
 
 
@@ -253,7 +275,7 @@ module.exports=function (){
 
 //<<<<<<<<<<<<<<<<<<<<<<<GET PLAYERS STANDING>>>>>>>>>>>>>>>>>>>>>>
 
-router.post('/getPlayerStandings',function(req,res){
+/*router.post('/getPlayerStandings',function(req,res){
   var tourId = req.body.tourId;
   var rounds = req.body.round;
   var fixture = false;
@@ -267,7 +289,7 @@ router.post('/getPlayerStandings',function(req,res){
       res.render('result',{matchresult:results});
     }
   });
-});
+});*/
 
 //++++++++++++++++++++++++++++++GET SWISS PAIRING+++++++++++++++++++++++++++++++++++++++++++
 
@@ -290,7 +312,7 @@ router.post('/getFixture',function(req,res){
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<GET ALL PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
 
-router.post('/getAllPlayers',function(req,res){
+/*router.post('/getAllPlayers',function(req,res){
   var tourId = req.body.tourId;
   player.getPlayers(req.session.name,tourId,function(error,results){
     if (error) {
@@ -303,9 +325,9 @@ router.post('/getAllPlayers',function(req,res){
     }
   });
 });
-
+*/
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+/*
 router.post('/getFinalResult',function(req,res){
   var tourId = req.body.tourId;
   player.getFinalResult(tourId,function(error,results){
@@ -319,23 +341,24 @@ router.post('/getFinalResult',function(req,res){
     }
   });
 });
-
+*/
 //>>>>>>>>>>>>>>>>>>>>>DELETE PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-router.get('/deletePlayers/:id',function(req,res){
-  var pid = req.params.id;
-  player.deletePlayers(pid,function(error,results){
-    if (error) {
-      res.send({
-        "code":400,
-        "failed":"error ocurred"
-      })
-    }else{
-      res.redirect('/tournament');
-    }
-  });
-});
+  router.post('/tournamentOver', function (req, res) {
+    var tourId = req.body.tourId;
+    var gameOver = 'finished'
 
+    player.updateTour(tourId,gameOver,function(err,result){
+      if (err) {
+        res.send({
+          "code":400,
+          "failed":"error ocurred"
+        })
+      }else{
+        res.json(result);
+      }
+    });
+  });
 /*<<<<<<<<<<<<<<<<<<<Sub Tournament COunt>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 return router;
 }
