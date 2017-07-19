@@ -1,4 +1,5 @@
     $(document).ready(function() {
+
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<DISPLAY TOURNAMENT>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
        var displayTournament = function(){
         $.get( "/api/sub_tour_count", function( data ) {
@@ -31,9 +32,15 @@
         })
 
         .then(function(result) {
-            alert("IN Add")
             $('#tour_name').val('');
+            if(result){
             $('.table').find( "tbody" ).append( '<tr>'+'<td>' + `<a href="/inside_game/${result.result}/${formData.tour_name}/NOTSTARTED" class="torny">${formData.tour_name}</a>` + '</td>'+'<td>' + 'NOT STARTED' + '</td>'+'</tr>' );
+            $('#usertournament').notify("Tournament Added","success");
+        }
+        else{
+            $('#usertournament').notify("Tournament Already Exist","error");
+        }
+
         });
         event.preventDefault();
     });

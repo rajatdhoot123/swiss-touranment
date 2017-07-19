@@ -70,12 +70,6 @@ var displayTournament = function (a,cb){
             group by winner_id order by Points desc limit 1*/
 
 
-
-
-
-
-
-
 var getTournamentStatus = function (a,tourId,cb){
     var con=create_connection();
     var sql=`select status from tournament where user_id = ${a} and tour_id = ${tourId}`;
@@ -86,7 +80,7 @@ var getTournamentStatus = function (a,tourId,cb){
         else{
             var sql1 = `select max(matches.round_id) as rounds,tournament.status,matches.winner_id,count(matches.winner_id) as Points,
             tournament.status from matches,
-            tournament where tournament.tour_id = ${tourId}
+            tournament where tournament.tour_id = ${tourId} and matches.tour_id = ${tourId}
             group by winner_id order by Points desc limit 1`;
             con.query(sql1,function(err,result){
                 con.end();
@@ -121,7 +115,7 @@ function userTournament(tour_name,user_id,cb){
             })
         }
         else{
-            cb(0,results);
+            cb(null,0);
         }
     }
 })

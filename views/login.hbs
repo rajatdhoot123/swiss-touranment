@@ -1,23 +1,27 @@
+
+
 <html>
 
-<link rel="stylesheet" type="text/css" href="loginstyle.css">
+<link rel="stylesheet" type="text/css" href="/loginstyle.css">
 <head>
 <meta charset="utf-8">
 
-<title>Best Login Page design in html and css</title>
+<title>Login</title>
 
 </head>
 
 <body>
+
 <div id="login">
 <h1><strong> Welcome. </strong> Please login.</h1>
 
 <form method="POST" action="api/loginUser" >
 
 <fieldset>
-<p><input type="text" name="email" required value="useremail" onBlur="if(this.value=='')this.value='Username'" onFocus="if(this.value=='Username')this.value='' "></p>
+{{resultResponse}}
+<p><input type="text" name="email" required  onBlur="if(this.value=='')this.value='Username'" onFocus="if(this.value=='Username')this.value='' "></p>
 
-<p><input type="password" name="password" required value="Password" onBlur="if(this.value=='')this.value='Password'" onFocus="if(this.value=='Password')this.value='' ">
+<p><input type="password" name="password" required  onBlur="if(this.value=='')this.value='Password'" onFocus="if(this.value=='Password')this.value='' ">
 </p>
 
 <p>

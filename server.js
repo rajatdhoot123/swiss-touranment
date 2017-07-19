@@ -8,11 +8,14 @@ const api = require('./server/routes/api')();
 var hbs = require('express-handlebars');
 var path = require('path');
 var app = express();
+var expressValidator = require('express-validator');
+var expressSession = require('express-session');
 var session = require('express-session');
 var parse = bodyParser.urlencoded({ extended: true });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
+var passport   = require('passport')
 app.set('views',path.join(__dirname,'/views'));
 app.use(express.static(path.join(__dirname,'/public')));
 
@@ -23,12 +26,18 @@ app.engine('hbs',hbs({extname:'hbs',defaultLayout : 'layouts',layoutsDir : path.
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine','hbs');
 
+app.use(expressValidator());
 app.use(session({
     secret: 'My secret coming',
     //store: new FileStore(),
-    resave:'true',
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
     cookie : 'maxAge: 1000*60*2'}));
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 /*app.use(function(req,res,next){
     res.header("Access-Control-Allow-Origin", "*");
@@ -39,7 +48,8 @@ app.use(session({
 
 
 app.get('/', function(req, res) {
-    res.render('login',{layout : false})
+    res.render('login',{title:'Form Validation',success: false,errors : req.session.errors, layout : false})
+    req.session.errors = null;
 });
 
 
@@ -65,7 +75,7 @@ app.route('/register')
 app.route('/login')
 
 .get(function(req, res) {
-    res.sendFile(path.join(__dirname + '/views/login.html'));
+    res.render('login',{title:'Form Validation',success: false,errors : req.session.errors, layout : false})
 })
 
 

@@ -42,7 +42,7 @@ module.exports=function (){
     var password = req.body.password;
     user.loginUser(email,password,function(err,result){
       if (err) {
-        res.render('login',{layout : false, userName : err})
+          res.redirect('/')
       }else{
         req.session.name=result[0].user_id;
         //res.cookie('user','email',{signed:true});
@@ -237,7 +237,7 @@ module.exports=function (){
 
   router.post('/usertournament',parse,function(req,res){
 
-    //if(!( === "" )){}
+
     var tour_name = req.body.tour_name;
     if(!(tour_name === "" )){
     player.userTournament([tour_name],[req.session.name],function(error,results){
@@ -247,12 +247,17 @@ module.exports=function (){
           "failed":"error ocurred"
         })
       }else{
+        if(results === 0){
+          res.send(JSON.stringify(results))
+        }
+        else{
         res.send(JSON.stringify({'result' : results.insertId}));
+      }
       }
     });
   }
   else{
-    res.send("You Cannot Add Empty Tournament");
+    res.send("Cannot Add Empty Tournament");
   }
   });
 

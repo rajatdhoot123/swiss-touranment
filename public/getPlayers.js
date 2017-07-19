@@ -12,9 +12,16 @@ $(document).ready(function() {
                     $('#startButton').html('').addClass('btn-block').append('Winner is ' + result[0].winner_id).prop("disabled" , true);
 
                     for (var i = 1;i <= rnds ; i++){
+                    $('#existingPlayer').attr({'disabled' : 'true'})
+                    $('#addPlay').attr({'disabled' : 'true'})
                         $('#rounds').find( "tbody" ).append('<tr>'+'<td>' + [i]  + '</td>'+'<td class="status">' + 'status'  + '</td>' +`<td class="exeround${i}">` + `<button type="button" class="btn btn-info btn-sm str_match" data-toggle="modal" data-target="#myModal2" id="roundbtn${i}" disabled = 'true' value="${i}">Execute Round ${i}</button>`+ '</td>'+'<td>' + `<button type="button" class="btn btn-info btn-sm getStanding" data-toggle="modal" data-target="#myModal3" id="currentFixture" value="${i}">Standing</button>`+ '</td>'+ '</tr>' );
+                        $( `.status` ).html('').text('Finished').css( {"z-index": "2","font-weight": "bold","color" : "red"} );
                 }
             }
+            else if(result[0].status == 'In Progress'){
+                   $('#existingPlayer').attr({'disabled' : 'true'})
+                    $('#addPlay').attr({'disabled' : 'true'})
+                }
         }
 
     })
@@ -120,9 +127,11 @@ $('#addPlay').on('click',function(event) {
     .then(function(result) {
         $('.addPlayInput').val('');
         if(result === 0){
-            alert("Player Already Exist")
+          $('.addPlay').notify("Player Already Exist","error");
+            //alert("Player Already Exist")
         }
         else{
+        $('.addPlayInput').notify("Player Added Successfully","success");
         $('#getCurrentPlayers').find( "tbody" ).append( '<tr>'+'<td>' + formData.pname  + '</td>'+'</tr>' );
 
         $('#currentStatus').find( "tbody" ).append( '<tr>'+'<td>' + formData.pname + '</td>'+'<td>' + 0  + '</td>'+'<td>' + 0  + '</td>'+'</tr>' );
@@ -174,7 +183,7 @@ $(document).on("click", ".str_match", function(event){
     .then(function(result) {
         $("#fixtureB td").remove();
         for (var i = 0;i < result.length ; i++){
-            $('#fixtureB').find( "tbody" ).append('<tr>'+'<td>' + `<input type="radio" name="pname${i}" value="${result[i].player_name}" id="${formData.round}">`+'</td>'+'<td>'+ result[i++].player_name +'</td>' +'<td>'+ `<input type="radio" name="pname${i-1}" value="${result[i].player_name}" id="${formData.round}">` +'</td>'+ '<td>' + result[i].player_name  + '</td>' + '</tr>');
+            $('#fixtureB').find( "tbody" ).append('<tr>'+'<td>' + `<input type="radio" name="pname${i}" value="${result[i].player_name}" checked id="${formData.round}">`+'</td>'+'<td>'+ result[i++].player_name +'</td>' +'<td>'+ `<input type="radio" name="pname${i-1}" value="${result[i].player_name}" id="${formData.round}">` +'</td>'+ '<td>' + result[i].player_name  + '</td>' + '</tr>');
 
         }
     });
@@ -302,10 +311,11 @@ else{
                     $(roundName).attr({'disabled' : 'true'})
                     $(`#roundbtn${i+2}`).prop("disabled" , false)
                     $(`.btnfix${i+1}`).prop("disabled" , false)
-
                     $(roundName).html('')
                     $(roundName).append('Round Played')
                     $( roundName ).css( "background-color", "red" );
+                    $('#existingPlayer').attr({'disabled' : 'true'})
+                    $('#addPlay').attr({'disabled' : 'true'})
                     $( `td.exeround${i+1}` ).prev().html('').text('Finished').css( {"z-index": "2","font-weight": "bold","color" : "red"} );
                     if(($(`#roundbtn${i+1}`).val()) == rounds){
                         $('#startButton').attr({'disabled' : 'true'})

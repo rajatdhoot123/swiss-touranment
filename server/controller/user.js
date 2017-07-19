@@ -20,7 +20,6 @@ if(!err) {
 //+++++++++++++++++++++++++++++++++++++++++++++++++Logni User+++++++++++++++++++++++++++++++++++++++//
 
 function loginUser(email,password,cb){
-
   connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results) {
     if (error) {
       cb(error, 0)
