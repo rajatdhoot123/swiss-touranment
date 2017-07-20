@@ -6,7 +6,7 @@ var parse = bodyParser.urlencoded({ extended: true });
 var router = express.Router();
 var session = require('express-session');
 
-module.exports=function (){
+module.exports=function (app, passport){
 
   router.get('/',function(req,res){
     app.use(express.static(path.join(__dirname, '/index.html')));
@@ -36,20 +36,6 @@ module.exports=function (){
   });
 
   /*<<<<<<<<<<<<<<<<<<<LOGIN USER>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-
-  router.post('/loginUser', function(req, res) {
-    var email = req.body.email;
-    var password = req.body.password;
-    user.loginUser(email,password,function(err,result){
-      if (err) {
-          res.redirect('/')
-      }else{
-        req.session.name=result[0].user_id;
-        //res.cookie('user','email',{signed:true});
-        res.redirect('/tournament/'+req.session.name)
-      }
-    });
-  });
 
   /* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
@@ -315,40 +301,7 @@ router.post('/getFixture',function(req,res){
   });
 });
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<GET ALL PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
-
-/*router.post('/getAllPlayers',function(req,res){
-  var tourId = req.body.tourId;
-  player.getPlayers(req.session.name,tourId,function(error,results){
-    if (error) {
-      res.send({
-        "code":400,
-        "failed":"error ocurred"
-      })
-    }else{
-      res.render('getAllPlayer',{allPlayer : results});
-    }
-  });
-});
-*/
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-/*
-router.post('/getFinalResult',function(req,res){
-  var tourId = req.body.tourId;
-  player.getFinalResult(tourId,function(error,results){
-    if (error) {
-      res.send({
-        "code":400,
-        "failed":"error ocurred"
-      })
-    }else{
-      res.render('try',{work:results});
-    }
-  });
-});
-*/
-//>>>>>>>>>>>>>>>>>>>>>DELETE PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   router.post('/tournamentOver', function (req, res) {
     var tourId = req.body.tourId;
     var gameOver = 'finished'
@@ -365,5 +318,9 @@ router.post('/getFinalResult',function(req,res){
     });
   });
 /*<<<<<<<<<<<<<<<<<<<Sub Tournament COunt>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+
+
 return router;
 }

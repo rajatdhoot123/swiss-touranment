@@ -15,7 +15,9 @@ var parse = bodyParser.urlencoded({ extended: true });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
-var passport   = require('passport')
+var passport = require('passport');
+var flash    = require('connect-flash');
+require('./config/passport')(passport);
 app.set('views',path.join(__dirname,'/views'));
 app.use(express.static(path.join(__dirname,'/public')));
 
@@ -29,81 +31,15 @@ app.set('view engine','hbs');
 app.use(expressValidator());
 app.use(session({
     secret: 'My secret coming',
-    //store: new FileStore(),
     resave: false,
     saveUninitialized: false,
     cookie : 'maxAge: 1000*60*2'}));
 
-
 app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
+require('./app/routes.js')(app, passport);
 
-
-/*app.use(function(req,res,next){
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next()
-});
-*/
-
-
-app.get('/', function(req, res) {
-    res.render('login',{title:'Form Validation',success: false,errors : req.session.errors, layout : false})
-    req.session.errors = null;
-});
-
-
-
-app.get('/tournament/:uid', checkSignIn, function(req, res) {
-    res.render('tournament.hbs',{title: 'Tournament ',layout : "newLayout",
-        userId : req.params.uid
-    });
-});
-
-
-app.route('/register')
-
-.get(function(req, res) {
-    res.sendFile(path.join(__dirname + '/views/register.html'));
-})
-
-.post(function(req, res) {
-    console.log('processing');
-    res.send('processing the registration form!');
-})
-
-app.route('/login')
-
-.get(function(req, res) {
-    res.render('login',{title:'Form Validation',success: false,errors : req.session.errors, layout : false})
-})
-
-
-app.get('/inside_game/:id/:name/:status', checkSignIn, function(req, res) {
-    res.render('index1',{title: 'Tournament ',
-        tourId : req.params.id,
-        tourName : req.params.name,
-        status : req.params.status,
-        condition:false});
-});
-
-
-function checkSignIn(req, res, next){
-    if(req.session.name){
-        next();     //If session exists, proceed to page
-    }
-    else {
-        var err = new Error("Not logged in!");
-        res.status(404).send('You are not allowed to access')
-    }
-}
-
-app.get('/logout', function(req,res){
-   req.session.destroy(function (err) {
-    console.log("COOKIE DELETED");
-    res.redirect('/');
-});
-});
 
 app.use('/api',api);
 app.listen(3000);
