@@ -10,14 +10,14 @@ connection.query('USE ' + dbconfig.database);
 
 module.exports = function(passport) {
 
-console.log("In PassPort File")
+    console.log("In PassPort File")
     passport.serializeUser(function(user, done) {
-        done(null, user.user_id);
+        done(null, user.id);
     });
 
     // used to deserialize the user
-    passport.deserializeUser(function(user, done) {
-        connection.query("select * from users where user_id = " + user,function(err,rows){
+    passport.deserializeUser(function(id, done) {
+        connection.query("select * from users where id = " + id,function(err,rows){
             done(err, rows[0]);
         });
     });
@@ -57,7 +57,7 @@ console.log("In PassPort File")
                 }
             });
         })
-    );
+        );
 
 
 
@@ -84,9 +84,9 @@ console.log("In PassPort File")
                     return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
 
                 // all is well, return successful user
-                return done(null, rows[0],req.session.id = '1232');
+                return done(null, rows[0]);
             });
         })
-    );
+        );
 
 };

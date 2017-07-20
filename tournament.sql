@@ -1,10 +1,8 @@
 CREATE TABLE `users` (
-  `user_id` int(11) NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(100) NOT NULL,
-  `last_name` varchar(100) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
-  PRIMARY KEY (`user_id`)
+  PRIMARY KEY (`id`)
 )
 
 
@@ -15,7 +13,7 @@ CREATE TABLE `tournament` (
   `status` varchar(50) DEFAULT 'NOT STARTED',
   PRIMARY KEY (`tour_id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `tournament_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `tournament_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 )
 
 
@@ -26,7 +24,7 @@ CREATE TABLE `players` (
   `tour_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `players_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `players_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 )
 
 

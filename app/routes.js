@@ -27,28 +27,29 @@ module.exports = function(app, passport) {
         }),
     function(req, res) {
         console.log("hello");
-          if (req.body.remember) {
+        if (req.body.remember) {
             req.session.cookie.maxAge = 1000 * 60 * 3;
 /*            req.session.name=result[0].user_id;
-            res.redirect('/tournament/'+req.session.name)*/
-              res.redirect('/')
-          }else {
-          req.session.cookie.expires = false;
-      }
-      res.redirect('/');
-    });
+res.redirect('/tournament/'+req.session.name)*/
+res.redirect('/')
+}else {
+  req.session.cookie.expires = false;
+}
+res.redirect('/');
+});
+
 
 
 
     app.get('/tournament', function(req, res) {
-        console.log(user)
         res.render('tournament.hbs',{title: 'Tournament ',layout : "newLayout",
-            userId : req.params.uid
+            userId : req.session.passport.user
         });
     });
 
 
-app.get('/register', function(req, res) {
+
+    app.get('/register', function(req, res) {
         res.render('register',{title:'Form Validation',success: false,errors : req.session.errors, layout : false,message: req.flash('signupMessage')})
     });
 
@@ -67,7 +68,7 @@ app.get('/register', function(req, res) {
     })
 
 
-    app.get('/inside_game/:id/:name/:status', checkSignIn, function(req, res) {
+    app.get('/inside_game/:id/:name/:status', function(req, res) {
         res.render('index1',{title: 'Tournament ',
             tourId : req.params.id,
             tourName : req.params.name,

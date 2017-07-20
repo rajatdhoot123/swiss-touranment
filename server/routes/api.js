@@ -19,7 +19,7 @@ module.exports=function (app, passport){
     var players = req.body.pname;
     if(!(players === "" )){
     var tourId = req.body.tourId;
-    player.registerPlayers(players,tourId,req.session.name,function(err,result){
+    player.registerPlayers(players,tourId,req.session.passport.user,function(err,result){
       if (err) {
         res.send({
           "code":400,
@@ -77,7 +77,7 @@ module.exports=function (app, passport){
   /*<<<<<<<<<<<<<<<<<<<CURRENT STATUS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
   router.get('/currentStatus/:tourId', function (req, res) {
     var tourId = req.params.tourId;
-    player.currentStatus(req.session.name,tourId,function(err,result){
+    player.currentStatus(req.session.passport.user,tourId,function(err,result){
       if (err) {
         res.send({
           "code":400,
@@ -96,7 +96,7 @@ module.exports=function (app, passport){
 
   router.get('/getTournamentStatus/:tourId', function (req, res) {
     var tourId = req.params.tourId;
-    player.getTournamentStatus(req.session.name,tourId,function(err,result){
+    player.getTournamentStatus(req.session.passport.user,tourId,function(err,result){
       if (err) {
         res.send({
           "code":400,
@@ -114,7 +114,7 @@ module.exports=function (app, passport){
 
   router.post('/torunamentStatus/', function (req, res) {
     var tourName = req.body.tname;
-    player.tstatus(req.session.name,tourName,function(err,result){
+    player.tstatus(req.session.passport.user,tourName,function(err,result){
       if (err) {
         res.send({
           "code":400,
@@ -177,7 +177,7 @@ module.exports=function (app, passport){
 
   router.get('/getCurrentPlayers/:tourId', function (req, res) {
     var tourId = req.params.tourId;
-    player.currentStatus(req.session.name,tourId,function(err,result){
+    player.currentStatus(req.session.passport.user,tourId,function(err,result){
       if (err) {
         res.send({
           "code":400,
@@ -192,7 +192,7 @@ module.exports=function (app, passport){
   /*<<<<<<<<<<<<<<<<<<<CURRENT STATUS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
   router.get('/getPlayers/:id',function(req,res){
-    player.getPlayers(req.session.name,req.params.id,function(error,results){
+    player.getPlayers(req.session.passport.user,req.params.id,function(error,results){
       if (error) {
         res.send({
           "code":400,
@@ -207,7 +207,7 @@ module.exports=function (app, passport){
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   router.get('/getTotalPlayers/:tourId',function(req,res){
-    player.getTotalPlayers(req.params.tourId,req.session.name,function(error,results){
+    player.getTotalPlayers(req.params.tourId,req.session.passport.user,function(error,results){
       if (error) {
         res.send({
           "code":400,
@@ -226,7 +226,7 @@ module.exports=function (app, passport){
 
     var tour_name = req.body.tour_name;
     if(!(tour_name === "" )){
-    player.userTournament([tour_name],[req.session.name],function(error,results){
+    player.userTournament([tour_name],[req.session.passport.user],function(error,results){
       if (error) {
         res.send({
           "code":400,
@@ -251,7 +251,7 @@ module.exports=function (app, passport){
   /*<<<<<<<<<<<<<<<<<<<Sub Tournament Count>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
   router.get('/sub_tour_count',function(req,res){
-    player.displayTournament(req.session.name,function(error,results){
+    player.displayTournament(req.session.passport.user,function(error,results){
       if (error) {
         res.send({
           "code":400,
@@ -266,21 +266,19 @@ module.exports=function (app, passport){
 
 //<<<<<<<<<<<<<<<<<<<<<<<GET PLAYERS STANDING>>>>>>>>>>>>>>>>>>>>>>
 
-/*router.post('/getPlayerStandings',function(req,res){
-  var tourId = req.body.tourId;
-  var rounds = req.body.round;
-  var fixture = false;
-  player.getPlayerStandings(tourId,req.session.name,fixture,rounds,function(error,results){
-    if (error) {
-      res.send({
-        "code":400,
-        "failed":"error ocurred"
-      })
-    }else{
-      res.render('result',{matchresult:results});
-    }
+  router.get('/viewTournament',function(req,res){
+    player.displayTournament(req.session.passport.user,function(error,results){
+      if (error) {
+        res.send({
+          "code":400,
+          "failed":"error ocurred"
+        })
+      }else{
+        res.render('tournament',{success: false,errors : req.session.errors, result : JSON.stringify(results)})
+      }
+    });
   });
-});*/
+
 
 //++++++++++++++++++++++++++++++GET SWISS PAIRING+++++++++++++++++++++++++++++++++++++++++++
 
@@ -288,7 +286,7 @@ router.post('/getFixture',function(req,res){
   var rounds = req.body.round;
   var tourId = req.body.tourId;
   var fixture = true;
-  player.getPlayerStandings(tourId,req.session.name,fixture,rounds,function(error,results){
+  player.getPlayerStandings(tourId,req.session.passport.user,fixture,rounds,function(error,results){
     if (error) {
         throw error
       res.send({

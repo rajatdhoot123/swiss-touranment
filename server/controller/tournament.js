@@ -357,5 +357,6 @@ module.exports = {
     tstatus:tstatus,
     getRounds:getRounds,
     updateTour:updateTour,
-    getTournamentStatus:getTournamentStatus
+    getTournamentStatus:getTournamentStatus,
+    displayTournament:displayTournament
 }
