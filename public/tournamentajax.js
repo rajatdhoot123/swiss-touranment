@@ -33,13 +33,16 @@
 
         .then(function(result) {
             $('#tour_name').val('');
-            if(result){
-            $('.table').find( "tbody" ).append( '<tr>'+'<td>' + `<a href="/inside_game/${result.result}/${formData.tour_name}/NOTSTARTED" class="torny">${formData.tour_name}</a>` + '</td>'+'<td>' + 'NOT STARTED' + '</td>'+'</tr>' );
-            $('#usertournament').notify("Tournament Added","success");
-        }
-        else{
-            $('#usertournament').notify("Tournament Already Exist","error");
-        }
+            if(result.result == 'Empty Tournament'){
+                $('#usertournament').notify("Please Enter Tournament Name","error");
+            }
+            else if(result){
+                $('.table').find( "tbody" ).append( '<tr>'+'<td>' + `<a href="/inside_game/${result.result}/${formData.tour_name}/NOTSTARTED" class="torny">${formData.tour_name}</a>` + '</td>'+'<td>' + 'NOT STARTED' + '</td>'+'</tr>' );
+                $('#usertournament').notify("Tournament Added","success");
+            }
+            else if(result == 0){
+                $('#usertournament').notify("Tournament Already Exist","error");
+            }
 
         });
         event.preventDefault();

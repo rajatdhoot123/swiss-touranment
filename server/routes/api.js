@@ -257,7 +257,7 @@ module.exports=function (){
     });
   }
   else{
-    res.send("Cannot Add Empty Tournament");
+    res.send(JSON.stringify({'result' : 'Empty Tournament'}));
   }
   });
 

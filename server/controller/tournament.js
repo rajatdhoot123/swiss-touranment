@@ -264,7 +264,7 @@ var getRoundFixture = function(round,tourId,cb) {
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 var getTotalPlayers = function(tourId,a,cb) {
     var con = create_connection();
-    var sql1 = `update tournament set status = 'In Progress' where tour_id = ${tourId}`
+    var sql1 = `update tournament set status = 'InProgress' where tour_id = ${tourId}`
     con.query(sql1, function (err, result) {
         if (err) throw err;
         else{
