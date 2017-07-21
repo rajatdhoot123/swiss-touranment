@@ -33,7 +33,8 @@ app.use(session({
     secret: 'My secret coming',
     resave: false,
     saveUninitialized: false,
-    cookie : 'maxAge: 1000*60*2'}));
+    cookie : 'maxAge: 1000*60*2'})
+);
 
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions

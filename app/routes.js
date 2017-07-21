@@ -26,17 +26,27 @@ module.exports = function(app, passport) {
             failureFlash : true // allow flash messages
         }),
     function(req, res) {
-        console.log("hello");
-        if (req.body.remember) {
-            req.session.cookie.maxAge = 1000 * 60 * 3;
-/*            req.session.name=result[0].user_id;
-res.redirect('/tournament/'+req.session.name)*/
-res.redirect('/')
-}else {
-  req.session.cookie.expires = false;
-}
-res.redirect('/');
-});
+        console.log(console.log(req.cookie + "+++++++++++++++++++++++++++++"));
+        if (req.body.password === user.password) {
+            req.session.user = user;
+            res.redirect('/tournament')
+        }else {
+          req.session.cookie.expires = false;
+      }
+      res.redirect('/');
+  });
+
+
+    app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+
+    // the callback after google has authenticated the user
+    app.get('/auth/google/callback',
+        passport.authenticate('google', {
+            successRedirect : '/tournament',
+            failureRedirect : '/login'
+    }));
+
+
 
 
 
@@ -61,12 +71,18 @@ res.redirect('/');
     }));
 
 
-    app.route('/login')
+
+
+    app.get('/logout', function(req, res) {
+      req.session.reset();
+      res.redirect('/');
+  });
+/*    app.route('/login')
 
     .get(function(req, res) {
-        res.render('login',{title:'Form Validation',success: false,errors : req.session.errors, layout : false})
+        res.render('login',{title:'Form Validation',success: false,errors : req.session.errors, layout : false,message: req.flash('loginMessage') })
     })
-
+    */
 
     app.get('/inside_game/:id/:name/:status', function(req, res) {
         res.render('index1',{title: 'Tournament ',

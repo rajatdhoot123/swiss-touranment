@@ -1,51 +1,49 @@
-
-
 <html>
 
 <link rel="stylesheet" type="text/css" href="/loginstyle.css">
 <head>
-<meta charset="utf-8">
+    <meta charset="utf-8">
 
-<title>Login</title>
+    <title>Login</title>
 
 </head>
 
 <body>
 
-<div id="login">
-<h1><strong> Welcome. </strong> Please login.</h1>
+    <div id="login">
+        <h1><strong> Welcome. </strong> Please login.</h1>
 
-<form method="POST" action="/login" >
+        <form method="POST" action="/login" >
 
-<fieldset>
-{{resultResponse}}
-<p><input type="text" name="email" required  onBlur="if(this.value=='')this.value='Username'" onFocus="if(this.value=='Username')this.value='' "></p>
+            <fieldset>
 
-<p><input type="password" name="password" required  onBlur="if(this.value=='')this.value='Password'" onFocus="if(this.value=='Password')this.value='' ">
-</p>
+                <p><input type="text" name="email" required  onBlur="if(this.value=='')this.value='Username'" onFocus="if(this.value=='Username')this.value='' "></p>
 
-<p>
-    {{userName}}
-<a href="contact.html">Forgot Password?</a>
-</p>
+                <p><input type="password" name="password" required  onBlur="if(this.value=='')this.value='Password'" onFocus="if(this.value=='Password')this.value='' ">
+                </p>
 
-<p>
-<input type="submit" value="Login">
-</p>
+                <p>
+                    {{userName}}
+                    <a href="/register" class="btn btn-default" role="button"><h3>Sign Up</h3></a>
+                </p>
 
-</fieldset>
-</form>
+                <p>
+                    <input type="submit" value="Login">
+                </p>
 
-<p><span class="btn-round">or</span></p>
-<p>
-<a class="facebook-before"></a>
-<button class="facebook">Login Using Facbook</button>
-</p>
-<p>
-<a class="twitter-before"></a>
-<button class="twitter">Login Using Twitter</button>
-</p>
-</div> <!-- end login -->
+            </fieldset>
+        </form>
+
+        <p><span class="btn-round">or</span></p>
+        <p>
+            <a href="/auth/google" class="facebook-before"></a>
+            <button class="facebook">Login Using Facbook</button>
+        </p>
+        <p>
+            <a class="twitter-before"></a>
+            <button class="twitter">Login Using Twitter</button>
+        </p>
+    </div>
 
 
 </body>

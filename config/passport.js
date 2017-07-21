@@ -1,4 +1,7 @@
 var LocalStrategy   = require('passport-local').Strategy;
+/*var FacebookStrategy = require('passport-facebook').Strategy;*/
+var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
+var configAuth = require('./auth');
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
 var mysql = require('mysql');
@@ -9,9 +12,8 @@ connection.query('USE ' + dbconfig.database);
 
 
 module.exports = function(passport) {
-
-    console.log("In PassPort File")
     passport.serializeUser(function(user, done) {
+        console.log(JSON.stringify(user)  + "+++++++++++++++++++++++++++++++++++=")
         done(null, user.id);
     });
 
@@ -56,8 +58,9 @@ module.exports = function(passport) {
                     });
                 }
             });
-        })
-        );
+        }
+    )
+);
 
 
 
@@ -87,6 +90,52 @@ module.exports = function(passport) {
                 return done(null, rows[0]);
             });
         })
-        );
+    );
 
+
+
+
+    passport.use(new GoogleStrategy({
+
+        clientID        : configAuth.googleAuth.clientID,
+        clientSecret    : configAuth.googleAuth.clientSecret,
+        callbackURL     : configAuth.googleAuth.callbackURL,
+
+    },
+
+
+
+    function(token, refreshToken, profile, done) {
+
+        // make the code asynchronous
+        // User.findOne won't fire until we have all our data back from Google
+        var email = profile.email;
+
+        process.nextTick(function() {
+
+            connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, user) {
+                if (err){
+                    return done(err);
+                }
+                if (user.length > 0) {
+                    console.log(user)
+                    return done(null,user[0]);
+                } else {
+
+                    var newUserMysql = new Object();
+                    newUserMysql.email = email;
+                    var password = 'TopSecrateMission'
+
+                    var insertQuery = "INSERT INTO users ( email, password ) values (?,?)";
+                    console.log(email , "+==========================");
+                    connection.query(insertQuery,[email, password],function(err, rows) {
+                        newUserMysql.id = rows.insertId;
+                        console.log(err, "error");
+                        console.log(rows, "rows");
+                        return done(null, newUserMysql);
+                    });
+                }
+            });
+        });
+    }));
 };
