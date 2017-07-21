@@ -1,5 +1,5 @@
 var LocalStrategy   = require('passport-local').Strategy;
-/*var FacebookStrategy = require('passport-facebook').Strategy;*/
+var FacebookStrategy = require('passport-facebook').Strategy;
 var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 var configAuth = require('./auth');
 var bcrypt = require('bcrypt');
@@ -59,8 +59,8 @@ module.exports = function(passport) {
                 }
             });
         }
-    )
-);
+        )
+        );
 
 
 
@@ -90,7 +90,7 @@ module.exports = function(passport) {
                 return done(null, rows[0]);
             });
         })
-    );
+        );
 
 
 
@@ -107,8 +107,6 @@ module.exports = function(passport) {
 
     function(token, refreshToken, profile, done) {
 
-        // make the code asynchronous
-        // User.findOne won't fire until we have all our data back from Google
         var email = profile.email;
 
         process.nextTick(function() {
@@ -128,6 +126,48 @@ module.exports = function(passport) {
 
                     var insertQuery = "INSERT INTO users ( email, password ) values (?,?)";
                     console.log(email , "+==========================");
+                    connection.query(insertQuery,[email, password],function(err, rows) {
+                        newUserMysql.id = rows.insertId;
+                        console.log(err, "error");
+                        console.log(rows, "rows");
+                        return done(null, newUserMysql);
+                    });
+                }
+            });
+        });
+    }));
+
+
+    passport.use(new FacebookStrategy({
+
+        // pull in our app id and secret from our auth.js file
+        clientID        : configAuth.facebookAuth.clientID,
+        clientSecret    : configAuth.facebookAuth.clientSecret,
+        callbackURL     : configAuth.facebookAuth.callbackURL,
+        profileFields: ['id', 'displayName', 'photos', 'email']
+
+    },
+
+    function(token, refreshToken, profile, done) {
+
+        var email = profile.emails[0].value;
+
+        process.nextTick(function() {
+
+            connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, user) {
+                if (err){
+                    return done(err);
+                }
+                if (user.length > 0) {
+                    console.log(user)
+                    return done(null,user[0]);
+                } else {
+
+                    var newUserMysql = new Object();
+                    newUserMysql.email = email;
+                    var password = 'TopSecrateMission'
+
+                    var insertQuery = "INSERT INTO users ( email, password ) values (?,?)";
                     connection.query(insertQuery,[email, password],function(err, rows) {
                         newUserMysql.id = rows.insertId;
                         console.log(err, "error");
