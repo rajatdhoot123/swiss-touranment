@@ -1,6 +1,4 @@
 var session = require('express-session');
-
-
 var mysql = require('mysql');
 
 function create_connection() {
@@ -31,7 +29,7 @@ var registerPlayers = function registerPlayers(players,tourId,a, cb) {
                 con.query(sql,[players,tourId,a],function (error, results, fields) {
                     con.end();
                     if (error) {
-                        return;
+                        cb(error,null);
                     }
                     else{
                         cb(0,results);
@@ -59,16 +57,7 @@ var displayTournament = function (a,cb){
     })
 }
 
-
-
-
-
 //=================================================================================================
-/*select max(matches.round_id) as rounds,matches.winner_id,count(matches.winner_id) as Points,
-            tournament.status from matches,
-            tournament where matches.tour_id = 6 and tournament.status= 'Finished'
-            group by winner_id order by Points desc limit 1*/
-
 
 var getTournamentStatus = function (a,tourId,cb){
     var con=create_connection();
@@ -357,6 +346,5 @@ module.exports = {
     tstatus:tstatus,
     getRounds:getRounds,
     updateTour:updateTour,
-    getTournamentStatus:getTournamentStatus,
-    displayTournament:displayTournament
+    getTournamentStatus:getTournamentStatus
 }

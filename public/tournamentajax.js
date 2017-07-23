@@ -1,22 +1,22 @@
-    $(document).ready(function() {
+$(document).ready(function() {
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<DISPLAY TOURNAMENT>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-       var displayTournament = function(){
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<DISPLAY TOURNAMENT>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    var displayTournament = function(){
         $.get( "/api/sub_tour_count", function( data ) {
-          var temp = JSON.parse(data)
-          for (var i = 0 ; i < temp.length ; i ++){
+        var temp = JSON.parse(data)
+            for (var i = 0 ; i < temp.length ; i ++){
             $('#tournamet').find( "tbody" ).append( '<tr>'+'<td>' + `<a href="/inside_game/${temp[i].tour_id}/${temp[i].tour_name}/${temp[i].status}" class="torny">${temp[i].tour_name}</a>` + '</td>'+'<td>' + temp[i].status  + '</td>'+'</tr>' );
-
             }
         })
+        .fail(function(xhr, status, error) {
+        $.notify("Cannot Display Tournament. Internal Error.");
+    });
     }
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<GET ALL PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<GET ALL PLAYERS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<DISPLAY USER TOURNAMENT>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-
-
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<DISPLAY USER TOURNAMENT>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     displayTournament();
+
     $('#usertournament').on('click',function(event) {
         var formData = {
             'tour_name'         : $('input[name=tour_name]').val()
@@ -44,6 +44,9 @@
                 $('#usertournament').notify("Tournament Already Exist","error");
             }
 
+        })
+        .fail(function(xhr, status, error) {
+            $.notify("Cannot Add Tournament. Internal Error.");
         });
         event.preventDefault();
     });

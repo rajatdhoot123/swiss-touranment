@@ -12,7 +12,9 @@
 
     <div id="login">
         <h1><strong> Welcome. </strong> Please login.</h1>
-
+        {{#if message}}
+        <div class="alert alert-danger"> {{message}}</div>
+        {{/if}}
         <form method="POST" action="/login" >
 
             <fieldset>
@@ -42,7 +44,7 @@
         <p>
             <!-- <a class="twitter-before"></a> -->
              <a href="/auth/google" class="twitter-before"></a>
-            <button class="twitter">Login Using Twitter</button>
+            <button class="twitter">Login Using Google</button>
         </p>
     </div>
 

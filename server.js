@@ -10,7 +10,7 @@ var path = require('path');
 var app = express();
 var expressValidator = require('express-validator');
 var expressSession = require('express-session');
-var session = require('express-session');
+//var session = require('express-session');
 var parse = bodyParser.urlencoded({ extended: true });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -21,7 +21,14 @@ require('./config/passport')(passport);
 app.set('views',path.join(__dirname,'/views'));
 app.use(express.static(path.join(__dirname,'/public')));
 
-var FileStore = require('session-file-store')(session);
+var FileStore = require('session-file-store')(expressSession);
+
+var file = {
+    path : './temp/session',
+    userAsync : 'true',
+    reapInterval : 5000,
+    maxAge : 1000*60*2
+}
 
 
 app.engine('hbs',hbs({extname:'hbs',defaultLayout : 'layouts',layoutsDir : path.resolve( __dirname + '/views/layouts/')}))
@@ -29,7 +36,9 @@ app.set('views',path.join(__dirname,'views'));
 app.set('view engine','hbs');
 
 app.use(expressValidator());
-app.use(session({
+app.use(cookieParser())
+app.use(expressSession({
+    store:new FileStore(file),
     secret: 'My secret coming',
     resave: false,
     saveUninitialized: false,

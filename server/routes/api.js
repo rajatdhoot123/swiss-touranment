@@ -31,7 +31,7 @@ module.exports=function (app, passport){
     });
   }
   else{
-    res.send("You Cannont Add Empty Player");
+    res.json({result : "Empty"});
   }
   });
 

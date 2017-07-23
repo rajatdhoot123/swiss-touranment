@@ -8,7 +8,7 @@ $(document).ready(function() {
                 if(result[0].status == 'Finished'){
                     //$('.index1Container').fireworks();
                     $("#rounds td").remove();
-                    $('#startButton').html('').addClass('btn-block').append('Winner is ' + result[0].winner_id).prop("disabled" , true);
+                    $('#startButton').html('').addClass('btn-block').append('<h2>' +'Winner is ' + result[0].winner_id + '</h2>').prop("disabled" , true).css({"width":"100%","height":"80px"});
 
                     for (var i = 1;i <= rnds ; i++){
                     $('#existingPlayer').attr({'disabled' : 'true'})
@@ -104,9 +104,11 @@ $(document).on("click", "#addExisting", function(event){
         currentStatus();
         $('#addExisting').notify("Player Added","success");
 
+    })
+    .fail(function(xhr, status, error) {
+        $.notify("Cannot Add Players. Internal Error.");
     });
     event.preventDefault();
-
 });
 
 
@@ -132,14 +134,19 @@ $('#addPlay').on('click',function(event) {
         $('.addPlayInput').val('');
         if(result === 0){
           $('.addPlay').notify("Player Already Exist","error");
-            //alert("Player Already Exist")
         }
-        else{
+        if(result.insertId){
         $('.addPlay').notify("Player Added Successfully","success");
         $('#getCurrentPlayers').find( "tbody" ).append( '<tr>'+'<td>' + formData.pname  + '</td>'+'</tr>' );
 
         $('#currentStatus').find( "tbody" ).append( '<tr>'+'<td>' + formData.pname + '</td>'+'<td>' + 0  + '</td>'+'<td>' + 0  + '</td>'+'</tr>' );
     }
+    if(result.result === 'Empty'){
+        $('.addPlay').notify("Enter Player Name","error");
+    }
+    })
+    .fail(function(xhr, status, error) {
+        $.notify("Cannot Add Players. Internal Error.");
     });
     event.preventDefault();
 });
@@ -186,7 +193,6 @@ $(document).on("click", ".str_match", function(event){
 
     .then(function(result) {
         $("#fixtureB td").remove();
-        console.log(result)
         for (var i = 0;i < result.length ; i++){
             $('#fixtureB').find( "tbody" ).append('<tr>'+'<td>' + `<input type="radio" name="pname${i}"
                 value="${result[i].player_name}" checked id="${formData.round}">`
@@ -195,6 +201,9 @@ $(document).on("click", ".str_match", function(event){
                 id="${formData.round}">` +'</td>'+ '<td>' + result[i].player_name  + '</td>' + '</tr>');
 
         }
+    })
+    .fail(function(xhr, status, error) {
+        $.notify("Cannot Start Match. Internal Error.");
     });
     event.preventDefault();
 });
@@ -236,7 +245,9 @@ $(document).on("click", "#radioHandle", function(event){
     .then(function(result) {
         currentStatus();
     })
-
+    .fail(function(xhr, status, error) {
+        $.notify("Cannot Post. Internal Error.");
+    });
     event.preventDefault();
 })
 
@@ -255,13 +266,14 @@ var getRoundFixture = function(){
            $('#currentFixtureBody').find( "tbody" ).append('<tr>'+'<td>'+ result[i].winner_id +'</td>' + '<td>' + result[i].loser_id  + '</td>' + '</tr>');
        }
    })
+    .fail(function(xhr, status, error) {
+        $.notify("Cannot Get Fixture. Internal Error.");
+    });
 }
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 var updateTour = function(){
-
-
 var formData = {
         'tourId'        : $('.tourId').text()
     };
@@ -278,6 +290,9 @@ var formData = {
         for (var i = 0;i < result.length ; i++){
             $('#fixtureB').find( "tbody" ).append('<tr>'+'<td>' + `<input type="radio" name="pname${i}" value="${result[i].player_name}" id="${formData.round}">`+'</td>'+'<td>'+ result[i++].player_name +'</td>' +'<td>'+ `<input type="radio" name="pname${i-1}" value="${result[i].player_name}" id="${formData.round}">` +'</td>'+ '<td>' + result[i].player_name  + '</td>' + '</tr>');
         }
+    })
+    .fail(function(xhr, status, error) {
+        $.notify("Unable To Update TOurnament. Internal Error.");
     });
 }
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -354,22 +369,11 @@ else{
         }
     })
 })
+.fail(function(xhr, status, error) {
+        $.notify("Unable To Execute Match. Internal Error.");
+    });
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

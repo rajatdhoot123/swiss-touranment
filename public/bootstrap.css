@@ -4,10 +4,32 @@
 
 
 
-#newLayout {
+#Layout {
     background: rgb(153, 153, 255);
 }
 
+#newLayout {
+   background-color: rgba(245, 245, 245, 0);
+   padding: 50px;
+}
+
+
+#welcomeTour{
+    font-family: 'Butcherman', cursive;
+    font-size: 50px;
+}
+
+
 #topHeading{
     font-family: 'Permanent Marker', cursive;
+}
+
+
+#createTour{
+    font-family: 'Luckiest Guy', cursive;
+}
+
+#tourContainer{
+    background: #ffe6b3;
+    background-image: url("image/background.jpg");
 }

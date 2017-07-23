@@ -58,9 +58,8 @@ module.exports = function(passport) {
                     });
                 }
             });
-        }
-        )
-        );
+        })
+    );
 
 
 
@@ -90,7 +89,7 @@ module.exports = function(passport) {
                 return done(null, rows[0]);
             });
         })
-        );
+    );
 
 
 
@@ -100,7 +99,6 @@ module.exports = function(passport) {
         clientID        : configAuth.googleAuth.clientID,
         clientSecret    : configAuth.googleAuth.clientSecret,
         callbackURL     : configAuth.googleAuth.callbackURL,
-
     },
 
 
