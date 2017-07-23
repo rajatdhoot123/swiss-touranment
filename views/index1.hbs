@@ -1,84 +1,101 @@
 <link rel="stylesheet" href="/bootstrap.css" />
 <div class="container">
-  <div class="row">
-    <div class="col-sm-12 col-md-12">
-        <a href="/tournament" class="btn btn-info" id="status" role="button">Back</a>
-      <h4 class="text-right hidden" id="getValue" value="{{status}}"></h4>
-      <button type="button" style="margin : 10px;" class="btn btn-info btn-sm pull-right str_match" data-toggle="modal" id="startButton" data-target="#myModal1">Start Match</button>
-      <div class="modal fade" id="myModal1" role="dialog">
-        <div class="modal-dialog modal-sm">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title">Check</h4>
-            </div>
-            <div class="modal-body" id="startBody">
-              <p></p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn-sm btn-default" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-6 col-md-6">
-      <div class="panel panel-success">
-        <h4> {{tourName}}</h4>
-        <p class="hidden tourId">{{tourId}}</p>
-        <div class="col-sm-8">
-        <input type="text" class="form-control addPlayInput" placeholder="Enter Player Name" name="pname">
-        </div>
-        <div class="col-sm-3">
-        <button type="button" id="addPlay" class="btn btn-primary btn-sm addPlay">Add Players</button>
-        </div>
-        <table class="table table-striped" id="getCurrentPlayers">
-          <thead class="text-center">
-            <tr>
-              <th>Player Name</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" id="existingPlayer" data-target="#myModal">Existing Players</button>
-        <div class="modal fade" id="myModal" role="dialog">
-          <div class="modal-dialog">
+  <div class="index1Container" style="padding: 20px">
+    <div class="row">
+      <div class="col-sm-12 col-md-12">
+        <h4 class="text-right hidden" id="getValue" value="{{status}}"></h4>
+        <button type="button" style="margin : 10px;" class="btn btn-info btn-sm pull-right str_match" data-toggle="modal" id="startButton" data-target="#myModal1">Start Match</button>
+        <div class="modal fade" id="myModal1" role="dialog">
+          <div class="modal-dialog modal-sm">
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title text-center">Existing Players</h4>
+                <h4 class="modal-title">Check</h4>
               </div>
-              <div class="modal-body" id="removeButton">
-                <table class="table panel panel-info" id="playerId">
-                  <thead class="text-center">
-                    <tr class="text-center">
-                      <th>Player Name</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                </table>
+              <div class="modal-body" id="startBody">
+                <p></p>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn-sm btn-default" data-dismiss="modal">Close</button>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="panel panel-success col-sm-6 col-md-6 style="margin: 5px;">
-      <h4 class="text-center">Points Table </h4>
-      <div>
-        <table class="table table-bordered table-striped currentStatus" id="currentStatus">
+    <div class="row well">
+      <div class="col-sm-6 col-md-6">
+        <div class="panel panel-success">
+          <h4 class="text-center"> {{tourName}}</h4>
+          <p class="hidden tourId">{{tourId}}</p>
+          <div class="col-sm-8">
+            <input type="text" class="form-control addPlayInput" placeholder="Enter Player Name" name="pname">
+          </div>
+          <div class="col-sm-3">
+            <button type="button" id="addPlay" class="btn btn-primary btn-sm addPlay">Add Players</button>
+          </div>
+          <table class="table table-striped" id="getCurrentPlayers">
+            <thead class="text-center">
+              <tr>
+                <th>Player Name</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+          <button type="button" class="btn btn-info btn-sm" data-toggle="modal" id="existingPlayer" data-target="#myModal">Existing Players</button>
+          <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title text-center">Existing Players</h4>
+                </div>
+                <div class="modal-body" id="removeButton">
+                  <table class="table panel panel-info" id="playerId">
+                    <thead class="text-center">
+                      <tr class="text-center">
+                        <th>Player Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-success col-sm-6 col-md-6 style="margin: 5px;">
+        <h4 class="text-center">Points Table </h4>
+        <div>
+          <table class="table table-bordered table-striped currentStatus" id="currentStatus">
+            <thead class="text-center">
+              <tr class="text-center">
+                <th>Player Name</th>
+                <th>Win</th>
+                <th>Loss</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row well">
+      <div class="tclass">
+        <table class="table col-md-12 col-sm-12" id="rounds">
           <thead class="text-center">
-            <tr class="text-center">
-              <th>Player Name</th>
-              <th>Win</th>
-              <th>Loss</th>
+            <tr>
+              <th>Round#</th>
+              <th>Status</th>
+              <th>Execute Round</th>
+              <th>Standing</th>
             </tr>
           </thead>
           <tbody>
@@ -86,20 +103,6 @@
         </table>
       </div>
     </div>
-  </div>
-  <div class="tclass">
-  <table class="table col-md-12 col-sm-12" id="rounds">
-    <thead class="text-center">
-      <tr>
-        <th>Round#</th>
-        <th>Status</th>
-        <th>Execute Round</th>
-        <th>Standing</th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
   </div>
   <div class="col-sm-12 col-md-12">
 
@@ -174,7 +177,3 @@
    </div>
  </div>
 </div>
-
-
-
-

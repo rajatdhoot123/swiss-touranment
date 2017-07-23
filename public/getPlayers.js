@@ -1,13 +1,12 @@
 $(document).ready(function() {
 
-
-
     var getTournamentStatus = function(){
         $.get( "/api/getTournamentStatus/"+$('.tourId').text(), function( data ) {
             var result = JSON.parse(data);
             if(result.length){
                 var rnds = result[0].rounds;
                 if(result[0].status == 'Finished'){
+                    //$('.index1Container').fireworks();
                     $("#rounds td").remove();
                     $('#startButton').html('').addClass('btn-block').append('Winner is ' + result[0].winner_id).prop("disabled" , true);
 

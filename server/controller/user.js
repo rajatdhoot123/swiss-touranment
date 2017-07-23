@@ -1,4 +1,4 @@
-var bcrypt = require('bcrypt');
+/*var bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 var mysql      = require('mysql');
@@ -71,3 +71,4 @@ module.exports = {
 }
 
 
+*/

@@ -26,7 +26,6 @@ module.exports = function(app, passport) {
             failureFlash : true // allow flash messages
         }),
     function(req, res) {
-        console.log(console.log(req.cookie + "+++++++++++++++++++++++++++++"));
         if (req.body.password === user.password) {
             req.session.user = user;
             res.redirect('/tournament')
