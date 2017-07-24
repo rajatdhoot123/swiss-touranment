@@ -1,5 +1,4 @@
 var player = require('../server/controller/tournament');
-var user = require('../server/controller/user');
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -18,7 +17,6 @@ module.exports = function(app, passport) {
 
 
     app.get('/login', function(req, res) {
-        // render the page and pass in any flash data if it exists
         res.render('login',{title:'Form Validation', layout : false,message: req.flash('loginMessage')})
     });
 
@@ -47,20 +45,6 @@ module.exports = function(app, passport) {
            });
        })(req, res, next);
    });
-        // }
-        //     successRedirect : '/tournament', // redirect to the secure profile section
-        //     failureRedirect : '/login', // redirect back to the signup page if there is an error
-        //     failureFlash : true // allow flash messages
-        /*}),
-    function(req, res) {
-        if (req.body.password === user.password) {
-            req.session.user = user;
-            res.redirect('/tournament')
-        }else {
-          req.session.cookie.expires = false;
-      }
-      res.redirect('/');*/
-  // }));
 
 
     app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
@@ -121,6 +105,7 @@ app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' })
 
     // route for logging out
     app.get('/logout', function(req, res) {
+      console.log("Session Destroyed " + "=========================================================")
         req.logout();
         req.session.destroy();
         res.redirect('/');
@@ -153,10 +138,11 @@ app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' })
 
 
 
-    app.get('/logout', function(req, res) {
+/*    app.get('/logout', function(req, res) {
+      console.log("Session Reset Block " + "=========================================================")
       req.session.reset();
       res.redirect('/');
-  });
+  });*/
 /*    app.route('/login')
 
     .get(function(req, res) {
@@ -171,17 +157,6 @@ app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' })
             status : req.params.status,
             condition:false});
     });
-
-
-/*    function checkSignIn(req, res, next){
-        if(req.session.name){
-        next();     //If session exists, proceed to page
-    }
-    else {
-        var err = new Error("Not logged in!");
-        res.status(404).send('You are not allowed to access')
-    }
-}*/
 }
 
 

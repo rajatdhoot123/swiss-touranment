@@ -189,12 +189,6 @@ var getPlayerStandings = function (tourId, a,fixture,rounds,cb) {
             from matches where matches.tour_id = ${tourId} group by loser_id) as ls)
             on (p.player_name = ls.loser_id) having (p.user_id = ${a} and p.tour_id = ${tourId}) order by wins desc`;
 
-    /*var sql = (`SELECT players.player_name,players.tour_id,players.user_id,
-        COUNT(matches.winner_id) AS POINTS FROM players LEFT JOIN matches ON
-        matches.winner_id = players.player_name
-        GROUP BY players.player_name having players.user_id = ${a} and players.tour_id= ${tourId}
-        ORDER BY POINTS DESC`);*/
-
         con.query(sql, function (err,result) {
         if (err) throw err;
         var standings = result;
@@ -224,11 +218,6 @@ function getSwissPairings(standings, matches, rounds,tourId,fixture,cb) {
             if(!((matches.winner_id == player1 && matches.loser_id == player2)||(matches.winner_id == player2 && matches.loser_id == player1))) {
                 pairing.push([player1,player2]);
                 var temp;
-                // if (Math.random() > .5){
-                //     temp = player1;
-                //     player1 = player2;
-                //     player2 = temp;
-                // }
                 standings.splice(i, 1);
                 break;
             }

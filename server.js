@@ -1,7 +1,6 @@
 var express = require('express');
 var morgan = require('morgan');
 var player = require('./server/controller/tournament');
-var user = require('./server/controller/user');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 const api = require('./server/routes/api')();
@@ -53,3 +52,7 @@ require('./app/routes.js')(app, passport);
 
 app.use('/api',api);
 app.listen(3000);
+
+exports.closeServer = function(){
+  server.close();
+};

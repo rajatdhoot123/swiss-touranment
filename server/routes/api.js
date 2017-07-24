@@ -1,6 +1,5 @@
 var express = require('express');
 var player = require('../controller/tournament');
-var user = require('../controller/user');
 var bodyParser = require('body-parser');
 var parse = bodyParser.urlencoded({ extended: true });
 var router = express.Router();
@@ -8,13 +7,9 @@ var session = require('express-session');
 
 module.exports=function (app, passport){
 
-  router.get('/',function(req,res){
-    app.use(express.static(path.join(__dirname, '/index.html')));
-    res.send({ message: 'welcome to Swiss Tournament' });
-  });
-
 
   /*<<<<<<<<<<<<<<<<<<<Register Players>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+
   router.post('/registerPlayers', parse ,function(req,res){
     var players = req.body.pname;
     if(!(players === "" )){
@@ -316,9 +311,6 @@ router.post('/getFixture',function(req,res){
     });
   });
 /*<<<<<<<<<<<<<<<<<<<Sub Tournament COunt>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-
 
 return router;
 }
