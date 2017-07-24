@@ -17,7 +17,6 @@ module.exports = function(passport) {
         done(null, user.id);
     });
 
-    // used to deserialize the user
     passport.deserializeUser(function(id, done) {
         connection.query("select * from users where id = " + id,function(err,rows){
             done(err, rows[0]);
@@ -28,10 +27,9 @@ module.exports = function(passport) {
     passport.use(
         'local-signup',
         new LocalStrategy({
-            // by default, local strategy uses username and password, we will override with email
             usernameField : 'email',
             passwordField : 'password',
-            passReqToCallback : true // allows us to pass back the entire request to the callback
+            passReqToCallback : true
         },
         function(req, email, password, done) {
             // find a user whose email is the same as the forms email

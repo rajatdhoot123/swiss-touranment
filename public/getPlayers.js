@@ -6,7 +6,7 @@ $(document).ready(function() {
             if(result.length){
                 var rnds = result[0].rounds;
                 if(result[0].status == 'Finished'){
-                    //$('.index1Container').fireworks();
+                    $('.index1Container').fireworks();
                     $("#rounds td").remove();
                     $('#startButton').html('').addClass('btn-block').append('<h2>' +'Winner is ' + result[0].winner_id + '</h2>').prop("disabled" , true).css({"width":"100%","height":"80px"});
 
@@ -158,18 +158,6 @@ currentStatus();
 getPlayers();
 getCurrentPlayers();
 var rounds = 0;
-
-
-/*var status = $('#getValue')[0].innerText;
-if(status == 'Status NOTSTARTED'){
-    alert('Play Match')
-}
-else{
-    $('#startButton').attr({'disabled' : 'true'})
-    var winner = $('#currentStatus').find('tbody').children('tr:first-child').children('td:first-child').text()
-    alert(winner)
-}*/
-
 
 
 $( document ).on( "click", "#addExisting" ,function() {
@@ -375,6 +363,4 @@ else{
 
 }
 
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
 })
